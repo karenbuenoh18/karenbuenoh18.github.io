@@ -11,11 +11,12 @@
 #A3C7D6 
 */
 
+
 /* Barra de navegacion */
 
 .navbar {
   padding: 2rem;
-  background-color: #9F73AB;  
+  background: linear-gradient(#381441, #6828a0);  
 }
 
 a.nav-link{
@@ -356,10 +357,13 @@ h1 {
 }
 
 /* Pie de pagina (footer) */
+section.contacto{
+  background: whitesmoke;  
+}
 
 footer {
   min-height: 500px;
-  background-color: #3F3B6C;
+  background: linear-gradient(#381441, #6828a0);  
 }
 
 footer .seccion-oscura{
