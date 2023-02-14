@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300&family=Playfair+Display&family=Radio+Canada:wght@300&family=Raleway:ital,wght@0,100;1,300&family=Rubik+Glitch&family=Rubik+Mono+One&display=swap');  
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300&family=Oswald:wght@300&family=Playfair+Display&family=Radio+Canada:wght@300&family=Raleway:ital,wght@0,100;1,300&family=Rubik+Glitch&family=Rubik+Mono+One&display=swap');
 
-/* Colores */
+/* Colors */
 
 /* 
 #3F3B6C
@@ -23,12 +23,57 @@ a.nav-link{
   color: aliceblue;
 }
 
-.navbar-collapse {
+.navbar-collapse { /* vistas de las opciones responsivas en dispositivos móviles */
   align-items: center;
   justify-content: space-between; 
    
 }
 
+div.container a { /* Vista inicial de los elemenos a */    
+    color: #FFF;
+    text-decoration: none;
+    font: 20px Raleway;
+    margin: 0px 10px;
+    padding: 10px 10px;
+    position: relative;
+    z-index: 0;
+    cursor: pointer;
+}
+
+div.topBotomBordersOut a::before, div.topBotomBordersOut a::after
+{
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    height: 2px;
+    background: #FFF;
+    content: "";
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+div.topBotomBordersOut a::before
+{
+    top: 0px;
+    transform: translateY(10px);
+}
+
+div.topBotomBordersOut a::after
+{
+    bottom: 0px;
+    transform: translateY(-10px);
+}
+
+div.topBotomBordersOut a:hover::before, div.topBotomBordersOut a:hover::after
+{
+    opacity: 1;
+    transform: translateY(0px);
+}
+
+div.topBotomBordersOut a:hover
+{
+    color: #FFF; /* cambiar a blanco después de la animación */
+}
 /* Estilos generales */
 
 section {
@@ -108,6 +153,9 @@ h1 {
   margin: 20px;
 }
 
+.hero-principal h1{
+  font-family: 'Roboto Condensed', sans-serif;
+}
 .hero-principal h2 {
   font-size: 1.5rem;
   color: #615151;
