@@ -1,429 +1,223 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <!-- Metadatos -->
-  <!--     Estos datos nos ayudan a posicionar nuestra página en las búsquedas de internet -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
-  <meta charset="utf-8">
-  <meta name="author" content="Jane Doe">
-  <meta name="description" content="Portafolio de desarrollo web de Jane Doe">
-  <meta name="keywords" content="HTML, CSS, JavaScript, React">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Titulo -->
-  <title>Karen Bueno | Portafolio </title>
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="imagenes/LogotipoKB.png">  
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-  <!-- Iconos de Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-  <!-- CSS -->
-  <link href="/Estilos/style.css" rel="stylesheet">
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Rubik+Dirt&family=Share+Tech+Mono&display=swap"
-    rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karen Bueno — Tecnología, Danza, Arte y Aprendizaje</title>
+  <meta name="description" content="Universo digital de Karen Bueno. Tecnología, danza, música, arte y aprendizaje en un espacio personal coherente.">
+  <meta name="author" content="Karen Bueno">
+  <link rel="icon" type="image/x-icon" href="imagenes/LogotipoKB.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Karla:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Estilos/style.css">
 </head>
-
 <body>
-  <!-- Barra de navegacion -->
-  <nav class="navbar navbar-expand-md navbar-light">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler"
-        aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse container topBotomBordersOut" id="navbar-toggler">
-        <a class="navbar-brand" href="#">
-          <img src="imagenes/LogotipoKB.png" width="70" alt="Logo de la página web">
-        </a>
-        <ul class="navbar-nav d-flex justify-content-center align-items-center">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#sobre-mi"><i class="bi bi-person-fill"></i> Sobre mí</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#proyectos"><i class="bi bi-file-code-fill"></i> Proyectos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#testimonios"><i class="bi bi-chat-left-heart-fill"></i> Testimonios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#contacto"><i class="bi bi-envelope-fill"></i> Contacto</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/pages/blog.html"><i class="bi bi-envelope-fill"></i> Blog</a>
-          </li>
+  <div class="container-main">
+    <!-- NAVIGATION -->
+    <header class="header" id="header">
+      <nav class="nav">
+        <div class="nav-logo">
+          <a href="#home" class="logo-text">Karen</a>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="#home" class="nav-link">Inicio</a></li>
+          <li><a href="#about" class="nav-link">Sobre mí</a></li>
+          <li><a href="#projects" class="nav-link">Proyectos</a></li>
+          <li><a href="#danza" class="nav-link">Danza</a></li>
+          <li><a href="#art" class="nav-link">Música & Arte</a></li>
+          <li><a href="#bitacora" class="nav-link">Bitácora</a></li>
+          <li><a href="#contact" class="nav-link">Contacto</a></li>
         </ul>
-      </div>
-    </div>
-  </nav>
+      </nav>
+    </header>
 
-  <!-- Seccion Hero -->
-  <section class="hero align-items-stretch">
-    <div class="hero-principal d-flex flex-column justify-content-center align-items-center">
-      <img class="hero-imagen-desarrollador rounded-circle" src="./imagenes/1.png" alt="Foto de Karen Bueno">
-      <h1>Hola, soy Karen Bueno</h1>
-      <!--<h2>Desarrollo sitios web y escribo artículos sobre programación.</h2>-->
-
-      <!--Animación con JavaScript-->
-      <h2 class="text-primary mb-4" id="typewriter"></h2>
-    </div>
-    <div class="hero-inferior">
-      <img class="hero-inferior-imagen img-fluid" src="imagenes/hero-inferior.svg"
-        alt="Monitor, laptop y logos de HTML, CSS, JavaScript y React.">
-    </div>
-  </section>
-
-  <!-- Sobre mi -->
-  <section id="sobre-mi" class="sobre-mi seccion-oscura">
-    <div class="contenedor">
-      <h2 class="seccion-titulo">Conóceme</h2>
-      <p class="seccion-texto">Soy una persona curiosa, comprometida, empática y apasionada, me encanta aprender nuevas
-        cosas y sobre todo ponerlas en práctica. Me considero una persona que trabaja todos los días por sus metas y
-        siempre busco hacer lo que me hace feliz. Me gusta ayudar y dejar un impacto positivo en la sociedad. Soy
-        economista industrial de profesión y amo mezclar mis conocimientos con las Tecnologías de la Información para
-        crecer como persona, seguir cambiando el mundo, y no dejar de mirar hacia el futuro... </p>
-    </div>
-  </section>
-
- <!-- Experiencia -->
-<section class="experiencia seccion-clara">
-  <div class="container text-center">
-    <div class="row">
-      <!-- Estudiante -->
-      <div class="columna col-12 col-md-3">
-        <i class="bi bi-laptop"></i>
-        <p class="experiencia-titulo">Estudiante</p>
-        <p>Soy egresada en la carrera de Economía Industrial y actualmente me encuentro realizando mi proyecto de
-          titulación que habla sobre la influencia de las Tecnologías de la Información en el ámbito laboral. Además
-          me estoy formando en diferentes cursos para Web Developer y Data Scientist.</p>
-        <div class="badges-contenedor">
-          <span class="badge text-bg-dark">Ciencia de datos</span>
-          <span class="badge text-bg-dark">Desarrollo Web</span>
-          <span class="badge text-bg-dark">Programación</span>
+    <!-- HERO SECTION -->
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <div class="hero-image-wrapper">
+          <img src="imagenes/Perfil.png" alt="Karen Bueno" class="hero-image">
+        </div>
+        <h1 class="hero-title">Karen Bueno</h1>
+        <p class="hero-subtitle">
+          Economista Industrial apasionada por la tecnología, la danza, la música y el aprendizaje continuo.
+          Este es mi universo digital: donde conviven el código, el movimiento, la creatividad y la reflexión.
+        </p>
+        <div class="scroll-indicator">
+          <span>Explora</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 3v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
         </div>
       </div>
-      <!-- Nuevo Cuadro -->
-      <div class="columna col-12 col-md-3">
-        <i class="bi bi-laptop"></i>
-        <p class="experiencia-titulo">Nueva Experiencia</p>
-        <p>Descripción de la nueva experiencia.</p>
-        <div class="badges-contenedor">
-          <span class="badge text-bg-dark">Etiqueta1</span>
-          <span class="badge text-bg-dark">Etiqueta2</span>
-          <span class="badge text-bg-dark">Etiqueta3</span>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section about">
+      <div class="section-header">
+        <h2 class="section-title">Sobre mí</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="about-content">
+        <p class="about-intro">
+          Soy una persona multidimensional. Mi universo integra varias prácticas y formas de pensar que conviven naturalmente en mi día a día. No veo estas áreas como servicios separados, sino como diferentes dimensiones de quién soy.
+        </p>
+
+        <div class="dimensions-grid">
+          <article class="dimension-card">
+            <h3 class="dimension-title">Tecnología Digital</h3>
+            <p>
+              Trabajo en diseño y desarrollo de productos digitales. Creo flujos, dashboards, prototipos funcionales en FlutterFlow y Figma. Me apasionan las interfaces limpias, la experiencia del usuario y la arquitectura de información.
+            </p>
+          </article>
+
+          <article class="dimension-card">
+            <h3 class="dimension-title">Danza</h3>
+            <p>
+              Bailo y enseño danza, principalmente salsa cubana y casino. También estudio bachata, salsa en línea, bachazouk y zouk. La danza es para mí una forma de expresión, movimiento consciente y conexión. No es un complemento: es una parte central de mi identidad.
+            </p>
+          </article>
+
+          <article class="dimension-card">
+            <h3 class="dimension-title">Música & Arte</h3>
+            <p>
+              Estudio música en mis tiempos libres. Toco guitarra y teclado, escribo canciones. También dibujo y pinto. Estas prácticas creativas son parte de mi exploración personal y forma de procesar el mundo.
+            </p>
+          </article>
+
+          <article class="dimension-card">
+            <h3 class="dimension-title">Aprendizaje Continuo</h3>
+            <p>
+              Soy lectora voraz y curiosa. Comparto notas, reflexiones e ideas sobre lo que estudio. Mi bitácora es un archivo vivo de aprendizajes, un cuaderno digital donde documento mi formación intelectual y creativa.
+            </p>
+          </article>
         </div>
       </div>
-      <!-- Desarrollo Web -->
-      <div class="columna col-12 col-md-3">
-        <i class="bi bi-laptop"></i>
-        <p class="experiencia-titulo">Desarrollo Web</p>
-        <p>Construyo sitios web responsivos y modernos utilizando tecnologías como lo son HTML, CSS, JavaScript y
-          Bootstrap</p>
-        <div class="badges-contenedor">
-          <span class="badge text-bg-dark">HTML y CSS</span>
-          <span class="badge text-bg-dark">Bootstrap</span>
-          <span class="badge text-bg-dark">JavaScript</span>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="section projects">
+      <div class="section-header">
+        <h2 class="section-title">Proyectos Digitales</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="projects-grid" id="projects-grid">
+        <!-- Projects will be loaded here -->
+      </div>
+    </section>
+
+    <!-- DANZA SECTION -->
+    <section id="danza" class="section danza">
+      <div class="section-header">
+        <h2 class="section-title">Danza</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="danza-content">
+        <p class="danza-intro">
+          La danza es una parte central de mi vida. No solo es lo que hago, es cómo me expreso, cómo me conecto conmigo misma y con otros. Bailo porque el movimiento consciente es una forma de estar presente en el mundo.
+        </p>
+
+        <div class="danza-info">
+          <div class="danza-card">
+            <h3>Ritmos que bailo y enseño</h3>
+            <ul class="ritmos-list">
+              <li>Salsa Cubana & Casino</li>
+              <li>Bachata</li>
+              <li>Salsa en Línea</li>
+              <li>Bachazouk</li>
+              <li>Zouk</li>
+            </ul>
+          </div>
+
+          <div class="danza-card">
+            <h3>Mi práctica</h3>
+            <p>
+              Enseño principalmente salsa cubana y casino. Para mí, la enseñanza es una forma de compartir alegría, ritmo y conexión con otros. Es un espacio donde la técnica y la autenticidad conviven.
+            </p>
+          </div>
         </div>
       </div>
-      <!-- Podcast -->
-      <div class="columna col-12 col-md-3">
-        <i class="bi bi-laptop"></i>
-        <p class="experiencia-titulo">Podcast</p>
-        <p>Soy una chica que se empieza a sumergir en las Tecnologías de la Información y le platico a otras personas
-          lo que me hubiera gustado saber antes y durante este viaje.</p>
-        <div class="badges-contenedor">
-          <span class="badge text-bg-dark">StoryTelling</span>
-          <span class="badge text-bg-dark">Tecnología</span>
-          <span class="badge text-bg-dark">Conocimiento</span>
+    </section>
+
+    <!-- MÚSICA & ARTE SECTION -->
+    <section id="art" class="section art">
+      <div class="section-header">
+        <h2 class="section-title">Música & Arte</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="art-content">
+        <p class="art-intro">
+          Estas son mis prácticas creativas personales. Espacios donde exploro, expreso y juego sin presión de servicio o resultado. Mi creatividad vive aquí.
+        </p>
+
+        <div class="art-practice">
+          <div class="practice-card">
+            <h3>Música</h3>
+            <p>Guitarra, teclado, composición. Escribo canciones como forma de procesar emociones e ideas. La música es mi lenguaje cuando las palabras no alcanzan.</p>
+          </div>
+
+          <div class="practice-card">
+            <h3>Artes Visuales</h3>
+            <p>Dibujo y pintura como exploración visual. Experimento con formas, colores y técnicas. Es una práctica meditativa y de descubrimiento.</p>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- BITÁCORA SECTION -->
+    <section id="bitacora" class="section bitacora">
+      <div class="section-header">
+        <h2 class="section-title">Bitácora</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <p class="bitacora-intro">
+        Un archivo vivo de mis aprendizajes, lecturas, ideas y reflexiones. Notas de libros, apuntes sobre conceptos que estudio, y reflexiones sobre lo que voy aprendiendo.
+      </p>
+
+      <div class="bitacora-filters">
+        <button class="filter-btn active" data-filter="all">Todas</button>
+        <button class="filter-btn" data-filter="lectura">Lectura</button>
+        <button class="filter-btn" data-filter="idea">Idea</button>
+        <button class="filter-btn" data-filter="aprendizaje">Aprendizaje</button>
+        <button class="filter-btn" data-filter="reflexion">Reflexión</button>
+      </div>
+
+      <div class="bitacora-feed" id="bitacora-feed">
+        <!-- Notes will be loaded here -->
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="section contact">
+      <div class="section-header">
+        <h2 class="section-title">Contacto</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="contact-content">
+        <p>
+          ¿Tienes una pregunta, una idea de proyecto, o simplemente quieres conectar? Me encanta hablar con personas creativas, curiosas y apasionadas.
+        </p>
+
+        <div class="contact-links">
+          <a href="mailto:contacto@karenbueno.com" class="contact-link">Envía un email</a>
+          <a href="https://www.linkedin.com/in/karenbueno" target="_blank" class="contact-link">LinkedIn</a>
+          <a href="https://www.instagram.com/karenbueno" target="_blank" class="contact-link">Instagram</a>
+          <a href="https://github.com/karenbueno" target="_blank" class="contact-link">GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>Hecho con cuidado y sensibilidad. &copy; 2024 Karen Bueno.</p>
+    </footer>
   </div>
-</section>
 
-
-  <!-- Proyectos -->
-  <section id="proyectos" class="proyectos-recientes seccion-clara d-flex flex-column">
-    <h2 class="seccion-titulo">Mis proyectos recientes</h2>
-    <h3 class="seccion-descripcion">Estos son algunos proyectos que he creado recientemente...</h3>
-    <!-- Galeria de Proyectos -->
-    <div class="container text-center proyectos-contenedor">
-      <div class="row">
-        <!-- Proyecto 1 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="proyecto">
-            <img src="imagenes/EcoInclusive.jpg" alt="Proyecto EcoInclusive">
-            <div class="overlay">
-              <p>Proyecto EcoInclusive</p>
-              <div class="iconos-contenedor">
-                <a href="https://github.com/Steven-Newton/ProyectoIntegrador_FrontEnd" target="_blank"
-                  rel="noopener noreferrer">
-                  <i class="bi bi-github"></i>
-                </a>
-                <a href="#" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-laptop"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Proyecto 2 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="proyecto">
-            <img src="./imagenes/ClonacionGoogle.jpg" alt="Clonación Google">
-            <div class="overlay">
-              <p>Clonación Google</p>
-              <div class="iconos-contenedor">
-                <a href="https://github.com/karenbuenoh18/clonacion-google" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-github"></i>
-                </a>
-                <a href="#/" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-laptop"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Proyecto 3 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="proyecto">
-            <img src="imagenes/proyecto3.png" alt="Proyecto 1">
-            <div class="overlay">
-              <p>Proyecto 3</p>
-              <div class="iconos-contenedor">
-                <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-github"></i>
-                </a>
-                <a href="#/" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-laptop"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Proyecto 4 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="proyecto">
-            <img src="imagenes/proyecto4.png" alt="Proyecto 1">
-            <div class="overlay">
-              <p>Proyecto 4</p>
-              <div class="iconos-contenedor">
-                <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-github"></i>
-                </a>
-                <a href="#" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-laptop"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Proyecto 5 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="proyecto">
-            <img src="imagenes/proyecto5.png" alt="Proyecto 1">
-            <div class="overlay">
-              <p>Proyecto 5</p>
-              <div class="iconos-contenedor">
-                <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-github"></i>
-                </a>
-                <a href="#" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-laptop"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Proyecto 6 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="proyecto">
-            <img src="imagenes/proyecto6.png" alt="Proyecto 1">
-            <div class="overlay">
-              <p>Proyecto 6</p>
-              <div class="iconos-contenedor">
-                <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-github"></i>
-                </a>
-                <a href="#" target="_blank" rel="noopener noreferrer">
-                  <i class="bi bi-laptop"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <a href="https://github.com/karenbuenoh18" target="_blank" rel="noopener noreferrer">
-      <button type="button" class="btn btn-info">
-        Ver más proyectos
-        <i class="bi bi-brush-fill"></i>
-      </button>
-    </a>
-  </section>
-
-  <!-- Articulos -->
-  <section class="articulos justify-content-start">
-    <h2 class="seccion-titulo texto-negro">Artículos, Podcast y más...</h2>
-    <div class="card">
-      <div class="card-header">
-        Más recientes
-      </div>
-      <ul class="list-group list-group-flush">
-        <a href="https://www.notion.so/karenbuenoh18/3c5c85b4a5154536b50b3fee561a57d7?v=aba2de5d4b0b4268975d9da86cf87839&pvs=4" target="_blank"
-        rel="noopener noreferrer">
-        <li class="list-group-item">
-          LayoutParser, una herramienta increíble para Data Science. 
-        </li>
-      </a>
-        <a href="https://nancynsalazar.medium.com/gu%C3%ADa-r%C3%A1pida-para-construir-tu-portafolio-como-programador-a-9f02daeabb12"
-          target="_blank" rel="noopener noreferrer">
-          <li class="list-group-item">
-            Guía rápida para construir tu portafolio como programador(a)
-          </li>
-        </a>
-        <a href="https://nancynsalazar.medium.com/c%C3%B3mo-ser-un-a-mejor-programador-a-749c1bf98990" target="_blank"
-          rel="noopener noreferrer">
-          <li class="list-group-item">
-            Cómo ser un(a) mejor programador(a)
-          </li>
-        </a>
-        <a href="#" target="_blank" rel="noopener noreferrer">
-          <li class="list-group-item">
-            Python leer archivo JSON - cómo cargar JSON desde un archivo y procesar dumps
-          </li>
-        </a>
-        <a href="https://dev.to/a-cup-of-code-podcast/my-top-5-favorite-resources-for-learning-to-code" target="_blank"
-          rel="noopener noreferrer">
-          <li class="list-group-item">
-            "A cup of code" comparte su 5 mejores recursos para aprender a programar.
-          </li>
-        </a>
-      </ul>
-    </div>
-    <a href="https://dev.to/" target="_blank" rel="noopener noreferrer">
-      <button type="button" class="btn btn-info">
-        Ver más artículos
-        <i class="bi bi-pen-fill"></i>
-      </button>
-    </a>
-  </section>
-
-  <!-- Testimonios -->
-  <section id="testimonios" class="testimonios seccion-clara">
-    <h2 class="seccion-titulo">Testimonios</h2>
-    <h3 class="seccion-descripcion">Estos son algunos testimonios de mis clientes...</h3>
-
-    <!-- Carrusel -->
-    <div id="testimonios-carrusel" class="carousel carousel-dark slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="container">
-            <img class="testimonio-imagen rounded-circle" src="./imagenes/Nancy Salazar_1.jpg" alt="Foto de Nancy">
-            <p class="testimonio-texto">Karen Bueno demostró ser una buena estudiante mientras estuvo en el bootcamp de
-              Tecnolochicas PRO. Mostró bastante interés en desarrollar sus habilidades como programadora web y realizó
-              proyectos muy interesantes.</p>
-            <div class="testimonio-info">
-              <p class="cliente">Nancy Salazar</p>
-              <p class="cargo">Instructora en Tecnolochicas PRO</p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="container">
-            <img class="testimonio-imagen rounded-circle" src="imagenes/Gaby Serafín.jpg" alt="Foto de Nora">
-            <p class="testimonio-texto">Karen Bueno ha demostrado ser una persona muy comprometida y creativa en su
-              trabajo, además ha estado actualizándose en lenguajes de programación.</p>
-            <div class="testimonio-info">
-              <p class="cliente">Gabriela Serafín</p>
-              <p class="cargo">Abogada en el Instituto Federal de Telecomunicaciones</p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="container">
-            <img class="testimonio-imagen rounded-circle" src="imagenes/Ali Guzmán.jpg" alt="Foto de Leonardo">
-            <p class="testimonio-texto">Mel es una persona responsable y comprometida, tuvo una destacada participación
-              en el bootcamp de Desarrollo Java Full Stack de Generation, realizando de manera conjunta esa página web.
-              Cuenta con habilidades blandas como empatía, comunicación efectiva y mentalidad de crecimiento.</p>
-            <div class="testimonio-info">
-              <p class="cliente">Aline Guzmán</p>
-              <p class="cargo">Mentora en Generation México</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
-      </button>
-    </div>
-  </section>
-
-  <!-- Contacto -->
-  <section id="contacto" class="contacto seccion-oscura">
-    <div class="container">
-      <div class="container text-center rectangulo d-flex justify-content-evenly">
-        <div class="row">
-          <div class="col-12 col-md-4 seccion-titulo">
-            ¡Hablemos!
-          </div>
-          <div class="col-12 col-md-4 descripcion">
-            Contáctame para iniciar un proyecto juntos.
-          </div>
-          <div class="col-12 col-md-4">
-            <a href="mailto:karenbuenoh1809@gmail.com">
-              <button type="button">
-                Contacto
-                <i class="bi bi-envelope-check-fill"></i>
-              </button>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pie de pagina (footer) -->
-  <footer class="seccion-oscura d-flex flex-column align-items-center justify-content-center">
-    <img class="footer-logo" src="imagenes/KB.png" alt="Logo del portafolio">
-    <p class="footer-texto text-center">Si lo puedo imaginar, <br>lo puedo programar.</p>
-    <div class="iconos-redes-sociales d-flex flex-wrap align-items-center justify-content-center">
-      <a href="https://twitter.com/karenbuenoh18  " target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-twitter"></i>
-      </a>
-      <a href="https://github.com/karenbuenoh18" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-github"></i>
-      </a>
-      <a href="https://www.linkedin.com/in/karenbuenoh18/" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-linkedin"></i>
-      </a>
-      <a href="https://www.instagram.com/karenbuenoh18/" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-instagram"></i>
-      </a>
-      <a href="mailto:karenbuenoh1809@gmail.com" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-envelope"></i>
-      </a>
-    </div>
-    <div class="derechos-de-autor">Creado por Karen Bueno (2024) &#169;</div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-    crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
-  <script src="/js/main.js"></script>
-
+  <script src="js/main.js"></script>
 </body>
-
 </html>
