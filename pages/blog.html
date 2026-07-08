@@ -1,100 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <!-- Metadatos -->
-  <!--     Estos datos nos ayudan a posicionar nuestra página en las búsquedas de internet -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
-  <meta charset="utf-8">
-  <meta name="author" content="Jane Doe">
-  <meta name="description" content="Portafolio de desarrollo web de Jane Doe">
-  <meta name="keywords" content="HTML, CSS, JavaScript, React">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Titulo -->
-  <title>Blog</title>
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="imagenes/LogotipoKB.png">  
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-  <!-- Iconos de Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-  <!-- CSS -->
-  <link href="/Estilos/style.css" rel="stylesheet">
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Rubik+Dirt&family=Share+Tech+Mono&display=swap"
-    rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitácora — Karen Bueno</title>
+  <meta name="description" content="Bitácora de Karen Bueno: notas de lectura, ideas, aprendizajes y reflexiones. Un archivo vivo de mi formación intelectual y creativa.">
+  <meta name="author" content="Karen Bueno">
+  <link rel="icon" type="image/x-icon" href="../imagenes/LogotipoKB.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Karla:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Estilos/style.css">
 </head>
-
 <body>
-    <!-- Barra de navegacion -->
-  <nav class="navbar navbar-expand-md navbar-light">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler"
-        aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse container topBotomBordersOut" id="navbar-toggler">
-        <a class="navbar-brand" href="#">
-          <imgn src="/imagenes/LogotipoKB.png" href= "/index.html" width="70" alt="Logo de la página web">
-        </a>
-        <ul class="navbar-nav d-flex justify-content-center align-items-center">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#sobre-mi"><i class="bi bi-person-fill"></i> Sobre mí</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#proyectos"><i class="bi bi-file-code-fill"></i> Proyectos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#testimonios"><i class="bi bi-chat-left-heart-fill"></i> Testimonios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#contacto"><i class="bi bi-envelope-fill"></i> Contacto</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/pages/blog.html"><i class="bi bi-envelope-fill"></i> Blog</a>
-          </li>
+  <div class="container-main">
+    <!-- NAVIGATION -->
+    <header class="header" id="header">
+      <nav class="nav">
+        <div class="nav-logo">
+          <a href="../index.html#home" class="logo-text">Karen</a>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="../index.html#home" class="nav-link">Inicio</a></li>
+          <li><a href="../index.html#about" class="nav-link">Sobre mí</a></li>
+          <li><a href="../index.html#projects" class="nav-link">Proyectos</a></li>
+          <li><a href="../index.html#danza" class="nav-link">Danza</a></li>
+          <li><a href="../index.html#art" class="nav-link">Música & Arte</a></li>
+          <li><a href="blog.html" class="nav-link">Bitácora</a></li>
+          <li><a href="../index.html#contact" class="nav-link">Contacto</a></li>
         </ul>
+      </nav>
+    </header>
+
+    <!-- BITÁCORA -->
+    <section id="bitacora" class="section bitacora" style="margin-top: 80px;">
+      <div class="section-header">
+        <h2 class="section-title">Bitácora</h2>
+        <div class="section-divider"></div>
       </div>
-    </div>
-  </nav>
 
+      <p class="bitacora-intro">
+        Un archivo vivo de mis aprendizajes, lecturas, ideas y reflexiones. Notas de libros, apuntes sobre conceptos que estudio, y reflexiones sobre lo que voy aprendiendo.
+      </p>
 
-  <!-- Pie de pagina (footer) -->
-  <footer class="seccion-oscura d-flex flex-column align-items-center justify-content-center">
-    <img class="footer-logo" src="imagenes/KB.png" alt="Logo del portafolio">
-    <p class="footer-texto text-center">Si lo puedo imaginar, <br>lo puedo programar.</p>
-    <div class="iconos-redes-sociales d-flex flex-wrap align-items-center justify-content-center">
-      <a href="https://twitter.com/karenbuenoh18  " target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-twitter"></i>
-      </a>
-      <a href="https://github.com/karenbuenoh18" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-github"></i>
-      </a>
-      <a href="https://www.linkedin.com/in/karenbuenoh18/" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-linkedin"></i>
-      </a>
-      <a href="https://www.instagram.com/karenbuenoh18/" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-instagram"></i>
-      </a>
-      <a href="mailto:karenbuenoh1809@gmail.com" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-envelope"></i>
-      </a>
-    </div>
-    <div class="derechos-de-autor">Creado por Karen Bueno (2023) &#169;</div>
-  </footer>
+      <div class="bitacora-filters">
+        <button class="filter-btn active" data-filter="all">Todas</button>
+        <button class="filter-btn" data-filter="lectura">Lectura</button>
+        <button class="filter-btn" data-filter="idea">Idea</button>
+        <button class="filter-btn" data-filter="aprendizaje">Aprendizaje</button>
+        <button class="filter-btn" data-filter="reflexion">Reflexión</button>
+      </div>
 
+      <div class="bitacora-feed" id="bitacora-feed">
+        <article class="note-card" data-category="aprendizaje">
+          <span class="note-category">Aprendizaje</span>
+          <h3 class="note-title">LayoutParser para Data Science</h3>
+          <p class="note-excerpt">
+            Explorando LayoutParser, una herramienta increíble para el análisis de documentos y la extracción de información estructurada. Mis notas sobre cómo la estoy aplicando.
+          </p>
+          <span class="note-date">Nota de estudio</span>
+        </article>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-crossorigin="anonymous"></script>
-<script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
-<script src="/js/main.js"></script>
+        <article class="note-card" data-category="lectura">
+          <span class="note-category">Lectura</span>
+          <h3 class="note-title">Cómo construir tu portafolio</h3>
+          <p class="note-excerpt">
+            Apuntes de la guía rápida para armar un portafolio como programador(a): qué mostrar, cómo estructurarlo y por qué el proceso importa tanto como el resultado.
+          </p>
+          <span class="note-date">Nota de lectura</span>
+        </article>
 
+        <article class="note-card" data-category="reflexion">
+          <span class="note-category">Reflexión</span>
+          <h3 class="note-title">Tecnología y movimiento</h3>
+          <p class="note-excerpt">
+            Reflexiones sobre cómo la disciplina de la danza y el pensamiento estructurado de la programación se alimentan mutuamente en mi forma de crear y aprender.
+          </p>
+          <span class="note-date">Reflexión personal</span>
+        </article>
+
+        <article class="note-card" data-category="idea">
+          <span class="note-category">Idea</span>
+          <h3 class="note-title">Un universo digital coherente</h3>
+          <p class="note-excerpt">
+            Idea semilla: tratar mis distintas prácticas —código, danza, música, arte— no como servicios separados, sino como dimensiones de una misma identidad.
+          </p>
+          <span class="note-date">Idea en desarrollo</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>Hecho con cuidado y sensibilidad. &copy; 2024 Karen Bueno.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Filtrado de notas por categoría (sin dependencias)
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const notes = document.querySelectorAll('#bitacora-feed .note-card');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const filter = button.dataset.filter;
+        notes.forEach(note => {
+          const show = filter === 'all' || note.dataset.category === filter;
+          note.style.display = show ? '' : 'none';
+        });
+      });
+    });
+  </script>
 </body>
-
 </html>
