@@ -96,6 +96,13 @@ const dimensions = ['Ingeniería', 'Cloud', 'DevOps', 'IA', 'Arquitectura', 'Flu
     color: var(--muted); font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
   }
 
+  /* En escritorio, la fila ocupa el alto de la ventana para que el avatar
+     quede centrado respecto a la PANTALLA (no respecto al bloque de texto). */
+  @media (min-width: 861px) {
+    .hero-inner { min-height: calc(100svh - 160px); }
+    .hero-avatar { align-self: center; }
+  }
+
   @media (max-width: 860px) {
     .hero-inner { grid-template-columns: 1fr; gap: 36px; text-align: left; }
     .hero-avatar { order: -1; justify-content: flex-start; }
