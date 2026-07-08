@@ -1,0 +1,157 @@
+---
+import Base from '../layouts/Base.astro';
+
+const ritmos = ['Salsa Cubana & Casino', 'Bachata', 'Salsa en Línea', 'Bachazouk', 'Zouk'];
+---
+<Base
+  title="Karen Bueno — Danza, Música & Arte"
+  description="El lado creativo de Karen Bueno: danza (salsa cubana, casino, bachata, zouk), música y artes visuales. Dimensiones centrales de su universo."
+>
+  <header class="mini-nav">
+    <div class="container mini-inner">
+      <a href="/" class="logo">KAREN<span>.</span></a>
+      <a href="/" class="back">← Volver al universo</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Intro -->
+    <section class="section intro">
+      <div class="container">
+        <span class="eyebrow" data-reveal>Universo creativo</span>
+        <h1 class="section-title big" data-reveal data-reveal-delay="1">Danza, música y arte.</h1>
+        <p class="section-lead" data-reveal data-reveal-delay="2">
+          No son un complemento de lo técnico: son parte central de quién soy. La misma curiosidad que me
+          lleva a diseñar sistemas me lleva a moverme, componer y crear. Aquí viven mis prácticas creativas.
+        </p>
+      </div>
+    </section>
+
+    <!-- Danza -->
+    <section id="danza" class="section">
+      <div class="container">
+        <span class="eyebrow" data-reveal>Danza</span>
+        <h2 class="section-title" data-reveal data-reveal-delay="1">El movimiento como lenguaje.</h2>
+        <p class="section-lead" data-reveal data-reveal-delay="2">
+          La danza me enseñó otra forma de precisión: el ritmo, la escucha, la presencia. Bailar y enseñar
+          es diseñar experiencias en tiempo real, con el cuerpo. Es movimiento consciente y conexión.
+        </p>
+
+        <div class="two">
+          <article class="card pad" data-tilt data-reveal data-reveal-delay="1">
+            <div class="spotlight" aria-hidden="true"></div>
+            <h3 class="accent">Ritmos que bailo y enseño</h3>
+            <ul class="ritmos">
+              {ritmos.map((r) => <li>{r}</li>)}
+            </ul>
+          </article>
+          <article class="card pad" data-tilt data-reveal data-reveal-delay="2">
+            <div class="spotlight" aria-hidden="true"></div>
+            <h3 class="accent">Mi práctica</h3>
+            <p>
+              Enseño principalmente salsa cubana y casino. Para mí, la enseñanza es una forma de compartir
+              alegría, ritmo y conexión con otras personas. Un espacio donde la técnica y la autenticidad conviven.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Música & Arte -->
+    <section id="arte" class="section">
+      <div class="container">
+        <span class="eyebrow" data-reveal>Música & Arte</span>
+        <h2 class="section-title" data-reveal data-reveal-delay="1">Crear para procesar el mundo.</h2>
+        <p class="section-lead" data-reveal data-reveal-delay="2">
+          Espacios donde exploro, expreso y juego sin presión de resultado. Componer una canción y diseñar
+          una arquitectura se parecen más de lo que parece: ambas buscan estructura y emoción.
+        </p>
+
+        <div class="two">
+          <article class="card pad center" data-tilt data-reveal data-reveal-delay="1">
+            <div class="spotlight" aria-hidden="true"></div>
+            <h3 class="accent2">Música</h3>
+            <p>
+              Guitarra, teclado y composición. Escribo canciones como forma de procesar emociones e ideas.
+              La música es mi lenguaje cuando las palabras no alcanzan.
+            </p>
+          </article>
+          <article class="card pad center" data-tilt data-reveal data-reveal-delay="2">
+            <div class="spotlight" aria-hidden="true"></div>
+            <h3 class="accent2">Artes visuales</h3>
+            <p>
+              Dibujo y pintura como exploración visual. Experimento con formas, colores y técnicas.
+              Es una práctica meditativa y de descubrimiento.
+            </p>
+          </article>
+        </div>
+
+        <div class="back-cta" data-reveal>
+          <a class="btn-ghost" href="/">← Volver al universo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>Karen Bueno</span>
+      <span class="f-quote">Si lo puedo imaginar, lo puedo programar.</span>
+      <span>© 2026</span>
+    </div>
+  </footer>
+</Base>
+
+<style>
+  .mini-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(6, 6, 9, 0.6);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .mini-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .logo { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; letter-spacing: 0.16em; color: #fff; }
+  .logo span { color: var(--a1); }
+  .back { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .back:hover { color: #fff; }
+
+  .intro { padding-top: 150px; }
+  .section-title.big { font-size: clamp(2rem, 5vw, 3.4rem); }
+
+  .two {
+    margin-top: 48px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px;
+  }
+  .pad { padding: 30px; }
+  .center { text-align: center; }
+  .card .spotlight {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s var(--ease);
+    background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%), rgba(162,76,255,0.14), transparent 60%);
+  }
+  .card:hover .spotlight { opacity: 1; }
+  .card:hover { border-color: var(--border-2); transform: translateY(-4px); }
+  .accent { color: var(--a1); font-size: 1.3rem; margin-bottom: 18px; position: relative; z-index: 1; }
+  .accent2 { color: var(--a2); font-size: 1.3rem; margin-bottom: 18px; position: relative; z-index: 1; }
+  .card p { position: relative; z-index: 1; color: var(--muted); }
+
+  .ritmos { list-style: none; padding: 0; position: relative; z-index: 1; }
+  .ritmos li {
+    padding: 13px 0 13px 26px; position: relative; color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .ritmos li:last-child { border-bottom: none; }
+  .ritmos li::before { content: '◆'; position: absolute; left: 0; color: var(--a2); }
+
+  .back-cta { margin-top: 48px; }
+  .btn-ghost {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.82rem; letter-spacing: 0.03em;
+    padding: 13px 22px; border-radius: 12px; border: 1px solid var(--border-2); color: var(--text);
+    transition: all 0.3s var(--ease);
+  }
+  .btn-ghost:hover { border-color: var(--a1); color: #fff; box-shadow: 0 0 22px rgba(162,76,255,0.18); }
+
+  .footer { border-top: 1px solid var(--border); padding: 34px 0; margin-top: 40px; }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+  .f-quote { color: var(--faint); }
+  @media (max-width: 560px) { .footer-inner { flex-direction: column; gap: 8px; text-align: center; } }
+</style>

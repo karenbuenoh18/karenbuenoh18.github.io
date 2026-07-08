@@ -3,6 +3,7 @@ const links = [
   { href: '#inicio', label: 'Inicio' },
   { href: '#sobre', label: 'Sobre mí' },
   { href: '#proyectos', label: 'Proyectos' },
+  { href: '/creatividad', label: 'Danza & Arte', blank: true },
   { href: '#contacto', label: 'Contacto' },
 ];
 ---
@@ -11,7 +12,11 @@ const links = [
   <div class="nav-inner container">
     <a href="#inicio" class="logo">KAREN<span>.</span></a>
     <nav class="links">
-      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      {links.map((l) => (
+        <a href={l.href} target={l.blank ? '_blank' : undefined} rel={l.blank ? 'noopener' : undefined}>
+          {l.label}{l.blank && <span class="ext" aria-hidden="true">↗</span>}
+        </a>
+      ))}
     </nav>
   </div>
 </header>
@@ -55,6 +60,7 @@ const links = [
   }
   .links a:hover { color: #fff; }
   .links a:hover::after { width: 100%; }
+  .links a .ext { font-size: 0.72em; margin-left: 3px; opacity: 0.7; }
   @media (max-width: 640px) {
     .links { gap: 16px; }
     .links a { font-size: 0.7rem; }
