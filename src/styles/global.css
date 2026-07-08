@@ -20,12 +20,12 @@
   --muted: #9C9FB2;
   --faint: #6A6D80;
 
-  /* Single refined accent (periwinkle → lavender) + rare cyan */
-  --a1: #8E9BFF;
-  --a2: #C6B8FF;
-  --a3: #6FE0FF;
-  --grad: linear-gradient(120deg, #8E9BFF 0%, #C6B8FF 100%);
-  --glow: rgba(142, 155, 255, 0.45);
+  /* Single accent: synthwave purple -> pink */
+  --a1: #A24CFF;
+  --a2: #FF3CAC;
+  --a3: #FF3CAC;
+  --grad: linear-gradient(120deg, #A24CFF 0%, #FF3CAC 100%);
+  --glow: rgba(162, 76, 255, 0.45);
 
   /* Type */
   --font-display: 'Space Grotesk', system-ui, sans-serif;
@@ -63,9 +63,9 @@ body::before {
   inset: -30%;
   z-index: -3;
   background:
-    radial-gradient(42% 38% at 18% 14%, rgba(142, 155, 255, 0.16), transparent 60%),
-    radial-gradient(38% 34% at 84% 20%, rgba(198, 184, 255, 0.12), transparent 60%),
-    radial-gradient(46% 42% at 78% 86%, rgba(111, 224, 255, 0.08), transparent 62%);
+    radial-gradient(42% 38% at 18% 14%, rgba(162, 76, 255, 0.16), transparent 60%),
+    radial-gradient(38% 34% at 84% 20%, rgba(255, 60, 172, 0.12), transparent 60%),
+    radial-gradient(46% 42% at 78% 86%, rgba(255, 60, 172, 0.08), transparent 62%);
   filter: blur(60px);
   animation: nebula 30s ease-in-out infinite alternate;
   pointer-events: none;
@@ -97,7 +97,7 @@ h1, h2, h3, h4 {
 a { color: var(--a1); text-decoration: none; transition: color 0.25s var(--ease); }
 a:hover { color: var(--a2); }
 
-::selection { background: rgba(142, 155, 255, 0.3); color: #fff; }
+::selection { background: rgba(162, 76, 255, 0.3); color: #fff; }
 
 :focus-visible {
   outline: 2px solid var(--a1);
@@ -171,8 +171,8 @@ a:hover { color: var(--a2); }
   font-size: 0.72rem;
   letter-spacing: 0.02em;
   color: var(--a2);
-  background: rgba(142, 155, 255, 0.08);
-  border: 1px solid rgba(142, 155, 255, 0.22);
+  background: rgba(162, 76, 255, 0.08);
+  border: 1px solid rgba(162, 76, 255, 0.22);
   border-radius: 999px;
   padding: 4px 11px;
 }
