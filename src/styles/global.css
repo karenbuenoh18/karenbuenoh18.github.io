@@ -28,7 +28,7 @@
   --glow: rgba(162, 76, 255, 0.45);
 
   /* Type */
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-display: 'Orbitron', system-ui, sans-serif;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
@@ -88,8 +88,8 @@ body::after {
 /* Typography */
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  line-height: 1.14;
+  letter-spacing: 0.005em;
   color: #fff;
   font-weight: 600;
 }
