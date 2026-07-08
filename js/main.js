@@ -2,6 +2,9 @@ async function loadProjects() {
   const projectsGrid = document.getElementById('projects-grid');
   if (!projectsGrid) return;
 
+  // Si ya hay proyectos definidos en el HTML, no los sobrescribas.
+  if (projectsGrid.querySelector('.project-card')) return;
+
   projectsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">Los proyectos se cargarán aquí desde la base de datos</p>';
 }
 
