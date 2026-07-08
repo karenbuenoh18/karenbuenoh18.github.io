@@ -1,0 +1,102 @@
+---
+// Campo de partículas + constelación que reacciona al cursor.
+// Ligero (~90 nodos), rAF, DPR-aware, se apaga con prefers-reduced-motion.
+---
+<canvas id="starfield" aria-hidden="true"></canvas>
+
+<style>
+  #starfield {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.9;
+  }
+</style>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canvas = document.getElementById('starfield');
+  if (canvas instanceof HTMLCanvasElement && !reduce) {
+    const ctx = canvas.getContext('2d');
+    let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const pointer = { x: -9999, y: -9999 };
+    let nodes = [];
+    let raf = 0;
+
+    function resize() {
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.min(90, Math.round((w * h) / 16000));
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18,
+        r: Math.random() * 1.5 + 0.4,
+      }));
+    }
+
+    function tick() {
+      ctx.clearRect(0, 0, w, h);
+      for (const n of nodes) {
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > w) n.vx *= -1;
+        if (n.y < 0 || n.y > h) n.vy *= -1;
+
+        // gentle attraction toward the cursor
+        const dxp = pointer.x - n.x, dyp = pointer.y - n.y;
+        const dp = Math.hypot(dxp, dyp);
+        if (dp < 160) {
+          n.x += (dxp / dp) * 0.35;
+          n.y += (dyp / dp) * 0.35;
+        }
+
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(198, 200, 230, 0.55)';
+        ctx.fill();
+      }
+
+      // constellation links
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d < 120) {
+            ctx.strokeStyle = `rgba(142, 155, 255, ${0.14 * (1 - d / 120)})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+        // link to cursor
+        const dc = Math.hypot(nodes[i].x - pointer.x, nodes[i].y - pointer.y);
+        if (dc < 170) {
+          ctx.strokeStyle = `rgba(198, 184, 255, ${0.32 * (1 - dc / 170)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(pointer.x, pointer.y);
+          ctx.stroke();
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('pointermove', (e) => { pointer.x = e.clientX; pointer.y = e.clientY; }, { passive: true });
+    window.addEventListener('pointerleave', () => { pointer.x = -9999; pointer.y = -9999; });
+    window.addEventListener('resize', resize);
+    // pause when tab hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else raf = requestAnimationFrame(tick);
+    });
+
+    resize();
+    raf = requestAnimationFrame(tick);
+  }
+</script>

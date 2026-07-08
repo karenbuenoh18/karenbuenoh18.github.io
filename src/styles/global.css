@@ -1,0 +1,188 @@
+/* ============================================================
+   KAREN BUENO — Universo digital
+   Deep-space, quiet-luxury design system (Astro global)
+   ============================================================ */
+
+:root {
+  /* Space backgrounds */
+  --bg: #060609;
+  --bg-1: #0a0a11;
+  --bg-2: #0e0e18;
+
+  /* Glass surfaces */
+  --surface: rgba(255, 255, 255, 0.028);
+  --surface-2: rgba(255, 255, 255, 0.055);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-2: rgba(255, 255, 255, 0.16);
+
+  /* Text */
+  --text: #ECEDF3;
+  --muted: #9C9FB2;
+  --faint: #6A6D80;
+
+  /* Single refined accent (periwinkle → lavender) + rare cyan */
+  --a1: #8E9BFF;
+  --a2: #C6B8FF;
+  --a3: #6FE0FF;
+  --grad: linear-gradient(120deg, #8E9BFF 0%, #C6B8FF 100%);
+  --glow: rgba(142, 155, 255, 0.45);
+
+  /* Type */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Rhythm */
+  --container: 1120px;
+  --radius: 18px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Layered space backdrop: slow-drifting nebula behind the canvas */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -30%;
+  z-index: -3;
+  background:
+    radial-gradient(42% 38% at 18% 14%, rgba(142, 155, 255, 0.16), transparent 60%),
+    radial-gradient(38% 34% at 84% 20%, rgba(198, 184, 255, 0.12), transparent 60%),
+    radial-gradient(46% 42% at 78% 86%, rgba(111, 224, 255, 0.08), transparent 62%);
+  filter: blur(60px);
+  animation: nebula 30s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+/* Cinematic vignette */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: radial-gradient(120% 90% at 50% 0%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+  pointer-events: none;
+}
+
+@keyframes nebula {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(0, -2.5%, 0) scale(1.06); }
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+  font-weight: 600;
+}
+
+a { color: var(--a1); text-decoration: none; transition: color 0.25s var(--ease); }
+a:hover { color: var(--a2); }
+
+::selection { background: rgba(142, 155, 255, 0.3); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--a1);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Layout helpers */
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+
+.section { padding: clamp(72px, 12vh, 140px) 0; position: relative; }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--a1);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: "";
+  width: 22px; height: 1px;
+  background: var(--a1);
+  opacity: 0.7;
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  margin: 18px 0 0;
+  max-width: 18ch;
+}
+.section-lead {
+  color: var(--muted);
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  max-width: 60ch;
+  margin-top: 18px;
+}
+
+/* Glass card base */
+.card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+  transition: border-color 0.4s var(--ease), background 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+/* Scroll-reveal (JS toggles .is-in) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  will-change: opacity, transform;
+}
+[data-reveal].is-in { opacity: 1; transform: none; }
+[data-reveal-delay="1"] { transition-delay: 0.08s; }
+[data-reveal-delay="2"] { transition-delay: 0.16s; }
+[data-reveal-delay="3"] { transition-delay: 0.24s; }
+[data-reveal-delay="4"] { transition-delay: 0.32s; }
+
+/* Tech pills */
+.pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--a2);
+  background: rgba(142, 155, 255, 0.08);
+  border: 1px solid rgba(142, 155, 255, 0.22);
+  border-radius: 999px;
+  padding: 4px 11px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}

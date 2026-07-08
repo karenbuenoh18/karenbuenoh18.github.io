@@ -1,0 +1,121 @@
+---
+import { projects } from '../data/projects.js';
+---
+<section id="proyectos" class="section">
+  <div class="container">
+    <span class="eyebrow" data-reveal>Proyectos</span>
+    <h2 class="section-title" data-reveal data-reveal-delay="1">
+      Casos de estudio, no capturas de pantalla.
+    </h2>
+    <p class="section-lead" data-reveal data-reveal-delay="2">
+      Cada proyecto es una decisión tras otra. Aquí muestro el contexto, el problema, la arquitectura y
+      lo que aprendí — para enseñar cómo pienso al construir software, no solo qué construí.
+    </p>
+
+    <div class="grid">
+      {projects.map((p, i) => (
+        <article class="card project" data-tilt data-reveal data-reveal-delay={((i % 3) + 1).toString()}>
+          <div class="spotlight" aria-hidden="true"></div>
+          <div class="p-body">
+            <span class="p-domain">{p.domain}</span>
+            <h3 class="p-title">{p.title}</h3>
+            <p class="p-tagline">{p.tagline}</p>
+
+            <div class="p-tech">
+              {p.tech.map((t) => <span class="pill">{t}</span>)}
+            </div>
+
+            <details class="p-more">
+              <summary>Ver caso de estudio</summary>
+              <div class="p-detail">
+                <div class="p-block"><span class="p-label">Rol</span><p>{p.role}</p></div>
+                <div class="p-block"><span class="p-label">Contexto</span><p>{p.context}</p></div>
+                <div class="p-block"><span class="p-label">Problema</span><p>{p.problem}</p></div>
+
+                <div class="p-block">
+                  <span class="p-label">Arquitectura</span>
+                  <div class="flow">
+                    {p.flow.map((n, j) => (
+                      <>
+                        <span class="node">{n}</span>
+                        {j < p.flow.length - 1 && <span class="arrow" aria-hidden="true">→</span>}
+                      </>
+                    ))}
+                  </div>
+                  <p class="flow-note">{p.architectureNote}</p>
+                </div>
+
+                <div class="p-cols">
+                  <div class="p-block">
+                    <span class="p-label">Decisiones</span>
+                    <ul>{p.decisions.map((d) => <li>{d}</li>)}</ul>
+                  </div>
+                  <div class="p-block">
+                    <span class="p-label">Retos</span>
+                    <ul>{p.challenges.map((c) => <li>{c}</li>)}</ul>
+                  </div>
+                </div>
+
+                <div class="p-block">
+                  <span class="p-label">Aprendizajes</span>
+                  <ul>{p.learnings.map((l) => <li>{l}</li>)}</ul>
+                </div>
+              </div>
+            </details>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    margin-top: 56px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 22px;
+  }
+  .project { transition: transform 0.35s var(--ease), border-color 0.35s var(--ease); }
+  .project:hover { border-color: var(--border-2); }
+  .spotlight {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s var(--ease);
+    background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%), rgba(142,155,255,0.14), transparent 60%);
+  }
+  .project:hover .spotlight { opacity: 1; }
+  .p-body { position: relative; padding: 26px; z-index: 1; }
+  .p-domain {
+    font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--a1);
+  }
+  .p-title { font-size: 1.3rem; margin: 12px 0 0; }
+  .p-tagline { color: var(--muted); margin-top: 12px; font-size: 0.96rem; }
+  .p-tech { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+
+  .p-more { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 14px; }
+  .p-more summary {
+    cursor: pointer; list-style: none; font-family: var(--font-mono); font-size: 0.8rem;
+    color: var(--a2); display: inline-flex; align-items: center; gap: 8px;
+  }
+  .p-more summary::-webkit-details-marker { display: none; }
+  .p-more summary::after { content: '+'; font-size: 1.1rem; line-height: 1; transition: transform 0.3s var(--ease); }
+  .p-more[open] summary::after { transform: rotate(45deg); }
+  .p-detail { margin-top: 18px; display: grid; gap: 18px; animation: fade 0.5s var(--ease); }
+  @keyframes fade { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; } }
+  .p-label {
+    font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint);
+  }
+  .p-block p { margin-top: 6px; color: var(--muted); font-size: 0.92rem; }
+  .p-block ul { margin: 8px 0 0; padding-left: 18px; }
+  .p-block li { color: var(--muted); font-size: 0.9rem; margin-bottom: 7px; }
+  .p-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+  .node {
+    font-family: var(--font-mono); font-size: 0.72rem; color: var(--text);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px;
+  }
+  .arrow { color: var(--a1); font-size: 0.9rem; }
+  .flow-note { margin-top: 12px; }
+
+  @media (max-width: 560px) { .p-cols { grid-template-columns: 1fr; } }
+</style>

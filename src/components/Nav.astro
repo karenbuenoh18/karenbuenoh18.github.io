@@ -1,0 +1,76 @@
+---
+const links = [
+  { href: '#inicio', label: 'Inicio' },
+  { href: '#sobre', label: 'Sobre mí' },
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#contacto', label: 'Contacto' },
+];
+---
+<div id="progress" aria-hidden="true"></div>
+<header id="nav">
+  <div class="nav-inner container">
+    <a href="#inicio" class="logo">KAREN<span>.</span></a>
+    <nav class="links">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+  </div>
+</header>
+
+<style>
+  #progress {
+    position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+    background: var(--grad);
+    box-shadow: 0 0 12px var(--glow);
+    z-index: 1001;
+    transition: width 0.1s linear;
+  }
+  #nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    border-bottom: 1px solid transparent;
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease), backdrop-filter 0.4s var(--ease);
+  }
+  #nav.scrolled {
+    background: rgba(6, 6, 9, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom-color: var(--border);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .logo {
+    font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
+    letter-spacing: 0.16em; color: #fff;
+  }
+  .logo span { color: var(--a1); }
+  .links { display: flex; gap: 30px; }
+  .links a {
+    font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.04em;
+    color: var(--muted); position: relative; padding: 6px 0;
+  }
+  .links a::after {
+    content: ''; position: absolute; left: 0; bottom: 0; height: 1px; width: 0;
+    background: var(--grad); transition: width 0.3s var(--ease);
+  }
+  .links a:hover { color: #fff; }
+  .links a:hover::after { width: 100%; }
+  @media (max-width: 640px) {
+    .links { gap: 16px; }
+    .links a { font-size: 0.7rem; }
+    .logo { font-size: 0.95rem; }
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('nav');
+  const bar = document.getElementById('progress');
+  const onScroll = () => {
+    const y = window.scrollY;
+    nav?.classList.toggle('scrolled', y > 24);
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    if (bar) bar.style.width = `${Math.min(100, (y / (docH || 1)) * 100)}%`;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>

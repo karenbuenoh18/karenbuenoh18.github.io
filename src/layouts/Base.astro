@@ -1,0 +1,64 @@
+---
+import Starfield from '../components/Starfield.astro';
+import '../styles/global.css';
+
+const {
+  title = 'Karen Bueno — Universo digital',
+  description = 'El espacio personal de Karen Bueno: ingeniería, cloud, inteligencia artificial y arquitectura de software, junto a la danza, la música, el arte y el aprendizaje continuo.',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Karen Bueno" />
+    <link rel="icon" type="image/png" href="/imagenes/LogotipoKB.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/imagenes/foto.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <Starfield />
+    <slot />
+
+    <script>
+      // Scroll reveal
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+        }
+      }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+
+      // Card tilt + cursor spotlight
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce) {
+        document.querySelectorAll('[data-tilt]').forEach((card) => {
+          const el = card as HTMLElement;
+          el.addEventListener('pointermove', (ev) => {
+            const r = el.getBoundingClientRect();
+            const px = (ev.clientX - r.left) / r.width;
+            const py = (ev.clientY - r.top) / r.height;
+            el.style.setProperty('--mx', `${px * 100}%`);
+            el.style.setProperty('--my', `${py * 100}%`);
+            el.style.transform = `perspective(900px) rotateX(${(py - 0.5) * -5}deg) rotateY(${(px - 0.5) * 6}deg) translateY(-4px)`;
+          });
+          el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+        });
+      }
+    </script>
+  </body>
+</html>
