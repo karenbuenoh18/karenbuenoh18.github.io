@@ -110,6 +110,11 @@ a:hover { color: var(--a2); }
 
 .section { padding: clamp(72px, 12vh, 140px) 0; position: relative; }
 
+@media (max-width: 560px) {
+  .container { padding: 0 18px; }
+  .section { padding: clamp(56px, 10vh, 90px) 0; }
+}
+
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 0.75rem;

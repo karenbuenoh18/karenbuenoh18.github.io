@@ -120,9 +120,10 @@ const ritmos = ['Salsa Cubana & Casino', 'Bachata', 'Salsa en Línea', 'Bachazou
 
   .two {
     margin-top: 48px;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 22px;
   }
   .pad { padding: 30px; }
+  @media (max-width: 560px) { .pad { padding: 22px; } .intro { padding-top: 120px; } }
   .center { text-align: center; }
   .card .spotlight {
     position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s var(--ease);
