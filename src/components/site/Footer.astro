@@ -1,0 +1,154 @@
+---
+import { site } from '../../data/site';
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: t('footer.technology'),
+    links: [
+      { href: path('/', locale), label: t('nav.work') },
+      { href: path('/labs', locale), label: t('nav.labs') },
+    ],
+  },
+  {
+    title: t('site.universe'),
+    links: [{ href: path('/beyond', locale), label: t('nav.beyond') }],
+  },
+];
+---
+
+<footer class="footer">
+  <div class="container-wide">
+    <hr class="rule" />
+
+    <div class="top">
+      <div class="brand">
+        <a href={path('/', locale)} class="wordmark brand-type">{site.wordmark}<span>.</span></a>
+        <p class="quote">{t('footer.quote')}</p>
+      </div>
+
+      <nav class="cols" aria-label={t('nav.menu')}>
+        {
+          columns.map((c) => (
+            <div class="col">
+              <span class="col-title">{c.title}</span>
+              {c.links.map((l) => (
+                <a href={l.href}>{l.label}</a>
+              ))}
+            </div>
+          ))
+        }
+        <div class="col">
+          <span class="col-title">{t('contact.eyebrow')}</span>
+          <a href={`mailto:${site.email}`}>{t('contact.email')}</a>
+          <a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href={site.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </nav>
+    </div>
+
+    <div class="bottom">
+      <span>© {year} {site.name}. {t('footer.rights')}</span>
+      <span class="built">{t('footer.built')}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-bottom: var(--s-7);
+    margin-top: var(--s-9);
+  }
+
+  .top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr);
+    gap: var(--s-8);
+    padding-block: var(--s-8) var(--s-7);
+  }
+
+  .wordmark {
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+    color: var(--text);
+  }
+  .wordmark span {
+    color: var(--a);
+  }
+
+  .quote {
+    margin-top: var(--s-3);
+    font-size: var(--fs-base);
+    color: var(--text-3);
+    max-width: 30ch;
+  }
+
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-6);
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .col-title {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-4);
+    margin-bottom: 2px;
+  }
+
+  .col a {
+    font-size: var(--fs-base);
+    color: var(--text-2);
+  }
+
+  .col a:hover {
+    color: var(--text);
+  }
+
+  .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    color: var(--text-4);
+  }
+
+  @media (max-width: 860px) {
+    .top {
+      grid-template-columns: 1fr;
+      gap: var(--s-7);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .cols {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-5);
+    }
+    .bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .built {
+      display: none;
+    }
+  }
+</style>

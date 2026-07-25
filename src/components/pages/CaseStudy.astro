@@ -1,0 +1,526 @@
+---
+import { localize, nextProject, type WorkProject } from '../../data/work';
+import { categoryLabelKey } from '../../data/work/types';
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+interface Props {
+  project: WorkProject;
+}
+
+const { project } = Astro.props as Props;
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+const p = localize(project, locale);
+
+const next = nextProject(project.slug);
+const workHref = path('/work', locale);
+
+/** Narrative order: context first, then the hard part, then the answer. */
+const prose = [
+  { label: t('work.role'), body: p.role },
+  { label: t('work.context'), body: p.context },
+  { label: t('work.problem'), body: p.problem },
+  { label: t('work.solution'), body: p.solution },
+];
+
+const lists = [
+  { label: t('work.decisions'), items: p.decisions },
+  { label: t('work.challenges'), items: p.challenges },
+  { label: t('work.learnings'), items: p.learnings },
+].filter((l) => l.items.length > 0);
+---
+
+<article class="case">
+  {/* ---------- Header ---------- */}
+  <header class="hero">
+    <div class="container-wide">
+      <a class="back link-arrow" href={workHref}>
+        <span class="arrow back-arrow" aria-hidden="true">←</span>{t('work.back')}
+      </a>
+
+      <div class="meta-row">
+        <span class="domain mono">{p.domain}</span>
+        {project.status === 'live' && <span class="badge badge-live">{project.status}</span>}
+        <span class="cat mono">{t(categoryLabelKey[project.category])}</span>
+        <span class="period mono">{project.period}</span>
+      </div>
+
+      <h1 class="title h1">{p.title}</h1>
+      <p class="tagline">{p.tagline}</p>
+
+      {
+        project.tech.length > 0 && (
+          <ul class="tech">
+            {project.tech.map((tech) => (
+              <li class="pill">{tech}</li>
+            ))}
+          </ul>
+        )
+      }
+
+      {project.confidential && <p class="nda mono">{t('work.confidential')}</p>}
+    </div>
+  </header>
+
+  {/* ---------- Metrics ---------- */}
+  {
+    p.metrics.length > 0 && (
+      <section class="metrics" aria-label={t('work.impact')}>
+        <div class="container-wide">
+          <hr class="rule" />
+          <dl class="m-grid">
+            {p.metrics.map((m, i) => (
+              <div class="m" data-reveal data-reveal-delay={((i % 4) + 1).toString()}>
+                <dt>{m.value}</dt>
+                <dd>{m.label}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    )
+  }
+
+  {/* ---------- Narrative ---------- */}
+  <section class="section body">
+    <div class="container-wide">
+      <div class="prose">
+        {
+          prose.map((block, i) => (
+            <div class="p-block" data-reveal data-reveal-delay={((i % 3) + 1).toString()}>
+              <span class="label">{block.label}</span>
+              <p>{block.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- Architecture ---------- */}
+  <section class="section-tight arch-section">
+    <div class="container-wide">
+      <div class="arch surface edge-lit" data-reveal>
+        <span class="label">{t('work.architecture')}</span>
+
+        {
+          project.flow.length > 0 && (
+            <div class="flow" role="list">
+              {project.flow.map((node, i) => (
+                <>
+                  <span class="node" role="listitem">
+                    {node}
+                  </span>
+                  {i < project.flow.length - 1 && (
+                    <span class="f-arrow" aria-hidden="true">
+                      →
+                    </span>
+                  )}
+                </>
+              ))}
+            </div>
+          )
+        }
+
+        <p class="arch-note">{p.architecture}</p>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- Decisions / Challenges / Learnings ---------- */}
+  {
+    lists.length > 0 && (
+      <section class="section lists-section">
+        <div class="container-wide">
+          <div class="lists">
+            {lists.map((list, i) => (
+              <section class="list" data-reveal data-reveal-delay={((i % 3) + 1).toString()}>
+                <h2 class="l-title">{list.label}</h2>
+                <ul>
+                  {list.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {/* ---------- Impact ---------- */}
+  {
+    p.impact.length > 0 && (
+      <section class="section-tight impact-section">
+        <div class="container-wide">
+          <div class="impact surface" data-reveal>
+            <h2 class="i-title">{t('work.impact')}</h2>
+            <ul>
+              {p.impact.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {/* ---------- Next ---------- */}
+  {
+    next && (
+      <section class="next-section">
+        <div class="container-wide">
+          <a class="next" href={path(`/work/${next.slug}`, locale)}>
+            <span class="n-label mono">{t('work.next')}</span>
+            <span class="n-title">{next.title[locale]}</span>
+            <span class="n-arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        </div>
+      </section>
+    )
+  }
+</article>
+
+<style>
+  /* ---------- Header ---------- */
+  .hero {
+    padding-top: calc(var(--nav-h) + var(--s-8));
+    padding-bottom: var(--s-7);
+  }
+
+  .back {
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+  }
+
+  .back:hover {
+    color: var(--text);
+  }
+
+  .back .back-arrow {
+    transition: transform var(--t-med) var(--ease);
+  }
+
+  .back:hover .back-arrow {
+    transform: translateX(-4px);
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+    margin-top: var(--s-6);
+  }
+
+  .domain {
+    color: var(--a-soft);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .badge-live {
+    text-transform: uppercase;
+  }
+
+  .cat,
+  .period {
+    color: var(--text-4);
+  }
+
+  .title {
+    margin-top: var(--s-4);
+    max-width: 26ch;
+  }
+
+  .tagline {
+    margin-top: var(--s-4);
+    font-size: clamp(1.0625rem, 0.7vw + 0.95rem, 1.375rem);
+    line-height: 1.5;
+    color: var(--text-2);
+    max-width: 58ch;
+  }
+
+  .tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: var(--s-5);
+  }
+
+  .nda {
+    margin-top: var(--s-4);
+    color: var(--text-4);
+  }
+
+  /* ---------- Metrics ---------- */
+  .m-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: var(--s-6);
+    background: var(--line);
+  }
+
+  .m {
+    background: var(--bg);
+    padding: var(--s-2) var(--s-5) var(--s-5) 0;
+  }
+
+  .m:not(:first-child) {
+    padding-left: var(--s-5);
+  }
+
+  .m dt {
+    font-size: clamp(1.5rem, 2vw, 2.125rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    color: var(--text);
+    line-height: 1.05;
+  }
+
+  .m dd {
+    margin-top: 8px;
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+    max-width: 28ch;
+    line-height: 1.5;
+  }
+
+  /* ---------- Prose ---------- */
+  .prose {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-8) var(--s-8);
+  }
+
+  .p-block {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-4);
+  }
+
+  .p-block p {
+    font-size: var(--fs-lg);
+    line-height: 1.62;
+    color: var(--text-2);
+    max-width: 58ch;
+  }
+
+  /* ---------- Architecture ---------- */
+  .arch {
+    padding: clamp(24px, 3vw, 44px);
+    border-radius: var(--r-xl);
+    display: grid;
+    gap: var(--s-5);
+    background:
+      radial-gradient(100% 120% at 100% 0%, rgba(162, 76, 255, 0.07), transparent 60%),
+      var(--glass-1);
+  }
+
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .node {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text);
+    background: var(--glass-2);
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-sm);
+    padding: 9px 13px;
+  }
+
+  .f-arrow {
+    color: var(--a);
+    opacity: 0.75;
+  }
+
+  .arch-note {
+    font-size: var(--fs-lg);
+    line-height: 1.62;
+    color: var(--text-2);
+    max-width: 70ch;
+  }
+
+  /* ---------- Lists ---------- */
+  .lists {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-7);
+  }
+
+  .l-title {
+    font-size: var(--fs-lg);
+    letter-spacing: -0.02em;
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--line-2);
+    margin-bottom: var(--s-4);
+  }
+
+  .list ul {
+    display: grid;
+    gap: var(--s-4);
+  }
+
+  .list li {
+    position: relative;
+    padding-left: 20px;
+    font-size: var(--fs-base);
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .list li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.62em;
+    width: 7px;
+    height: 1px;
+    background: var(--a);
+    opacity: 0.8;
+  }
+
+  /* ---------- Impact ---------- */
+  .impact {
+    padding: clamp(24px, 3vw, 44px);
+    border-radius: var(--r-xl);
+    border-color: var(--a-tint-2);
+    background:
+      radial-gradient(90% 130% at 0% 0%, rgba(162, 76, 255, 0.09), transparent 58%),
+      var(--glass-1);
+  }
+
+  .i-title {
+    font-size: var(--fs-xl);
+    letter-spacing: -0.022em;
+    margin-bottom: var(--s-5);
+  }
+
+  .impact ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-4) var(--s-7);
+  }
+
+  .impact li {
+    position: relative;
+    padding-left: 22px;
+    font-size: var(--fs-base);
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .impact li::before {
+    content: '↗';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--a-soft);
+    font-size: 0.85em;
+  }
+
+  /* ---------- Next ---------- */
+  .next-section {
+    padding-block: var(--s-9) var(--s-6);
+  }
+
+  .next {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s-4);
+    padding: var(--s-7) 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .n-label {
+    grid-column: 1;
+    color: var(--text-4);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .n-title {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: clamp(1.375rem, 2vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-top: 8px;
+  }
+
+  .n-arrow {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    font-size: 1.5rem;
+    color: var(--text-4);
+    transition:
+      transform var(--t-med) var(--ease),
+      color var(--t-med) var(--ease);
+  }
+
+  .next:hover .n-arrow {
+    color: var(--a-soft);
+    transform: translateX(6px);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .m-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .m,
+    .m:not(:first-child) {
+      padding: var(--s-4) var(--s-4) var(--s-4) 0;
+    }
+    .m:nth-child(even) {
+      padding-left: var(--s-4);
+    }
+    .lists {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .prose,
+    .impact ul {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+    .title {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .m-grid {
+      grid-template-columns: 1fr;
+    }
+    .m,
+    .m:not(:first-child),
+    .m:nth-child(even) {
+      padding: var(--s-4) 0;
+    }
+  }
+</style>

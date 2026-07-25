@@ -1,0 +1,195 @@
+---
+import { architectureGallery } from '../../data/architecture';
+import { getProject } from '../../data/work';
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+const items = architectureGallery.map((item) => ({
+  ...item,
+  project: item.project ? getProject(item.project) : undefined,
+}));
+---
+
+<section id="architecture" class="section">
+  <div class="container-wide">
+    <div class="section-head">
+      <span class="eyebrow" data-reveal>{t('arch.eyebrow')}</span>
+      <h2 class="h2" data-reveal data-reveal-delay="1">{t('arch.title')}</h2>
+      <p class="lead" data-reveal data-reveal-delay="2">{t('arch.lead')}</p>
+    </div>
+
+    <div class="gallery">
+      {
+        items.map((item, i) => (
+          <figure
+            class:list={['item surface sheen', { wide: item.wide, pending: !item.image }]}
+            data-reveal
+            data-reveal-delay={((i % 3) + 1).toString()}
+          >
+            <div class="frame">
+              {item.image ? (
+                <img src={item.image} alt={item.alt?.[locale] ?? item.title[locale]} loading="lazy" />
+              ) : (
+                /* Placeholder draws the shape of a diagram rather than a
+                   grey box, so an empty slot still reads as intentional. */
+                <div class="ghost" aria-hidden="true">
+                  <span class="g-node" />
+                  <span class="g-line" />
+                  <span class="g-node" />
+                  <span class="g-line" />
+                  <span class="g-node" />
+                  <span class="g-soon mono">{t('arch.soon')}</span>
+                </div>
+              )}
+            </div>
+
+            <figcaption>
+              <h3 class="t">{item.title[locale]}</h3>
+              <p class="c">{item.caption[locale]}</p>
+              <ul class="tags">
+                {item.tags.map((tag) => (
+                  <li class="pill">{tag}</li>
+                ))}
+              </ul>
+              {item.project && (
+                <a class="link-arrow src" href={path(`/work/${item.project.slug}`, locale)}>
+                  {item.project.title[locale]}
+                  <span class="arrow" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              )}
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery {
+    margin-top: var(--s-8);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+
+  .item {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+    border-radius: var(--r-lg);
+  }
+
+  .item:hover {
+    border-color: var(--line-2);
+    transform: translateY(-2px);
+  }
+
+  .wide {
+    grid-column: span 2;
+  }
+
+  .frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.014) 1px, transparent 1px) 0 0 / 100% 26px,
+      linear-gradient(90deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px) 0 0 / 26px 100%,
+      var(--bg-1);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---- Placeholder diagram ---- */
+  .ghost {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .g-node {
+    width: 34px;
+    height: 22px;
+    border-radius: 5px;
+    border: 1px solid var(--line-2);
+    background: var(--glass-1);
+  }
+
+  .g-line {
+    width: 22px;
+    height: 1px;
+    background: var(--a-tint-2);
+  }
+
+  .g-soon {
+    position: absolute;
+    bottom: 12px;
+    left: 14px;
+    color: var(--text-4);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* ---- Caption ---- */
+  figcaption {
+    padding: var(--s-5);
+    display: grid;
+    gap: var(--s-3);
+    align-content: start;
+  }
+
+  .t {
+    font-size: var(--fs-md);
+    font-weight: 600;
+    letter-spacing: -0.018em;
+  }
+
+  .c {
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+    line-height: 1.55;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .src {
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+    margin-top: var(--s-1);
+  }
+
+  @media (max-width: 900px) {
+    .gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .wide {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .gallery {
+      grid-template-columns: 1fr;
+    }
+    .wide {
+      grid-column: span 1;
+    }
+  }
+</style>

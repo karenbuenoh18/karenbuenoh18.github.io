@@ -1,0 +1,12 @@
+---
+import Labs from '../../components/pages/Labs.astro';
+import Base from '../../layouts/Base.astro';
+import { site } from '../../data/site';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('es');
+---
+
+<Base title={`${t('labs.title')} — ${site.name}`} description={t('labs.description')}>
+  <Labs />
+</Base>

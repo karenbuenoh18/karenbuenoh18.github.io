@@ -1,0 +1,192 @@
+---
+import {
+  categoryDescKey,
+  categoryLabelKey,
+  populatedCategories,
+  projects,
+  projectsIn,
+} from '../../data/work';
+import { getLocale, useTranslations } from '../../i18n/utils';
+import WorkRow from '../work/WorkRow.astro';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+const groups = populatedCategories.map((category) => ({
+  category,
+  items: projectsIn(category),
+}));
+
+let n = 0;
+const numbered = groups.map((g) => ({
+  ...g,
+  items: g.items.map((project) => ({ project, n: ++n })),
+}));
+
+const filters = [
+  { value: 'all', label: t('work.filter.all'), count: projects.length },
+  ...populatedCategories.map((c) => ({
+    value: c,
+    label: t(categoryLabelKey[c]),
+    count: projectsIn(c).length,
+  })),
+];
+---
+
+<section class="section head-section">
+  <div class="container-wide">
+    <div class="section-head">
+      <span class="eyebrow" data-reveal>{t('work.eyebrow')}</span>
+      <h1 class="h1" data-reveal data-reveal-delay="1">{t('work.title')}</h1>
+      <p class="lead" data-reveal data-reveal-delay="2">{t('work.lead')}</p>
+    </div>
+
+    {/* Filter is progressive enhancement: without JS every group is
+        already rendered and reachable. */}
+    <div class="filters" data-reveal data-reveal-delay="3" role="group">
+      {
+        filters.map((f, i) => (
+          <button
+            class:list={['chip', { active: i === 0 }]}
+            data-filter={f.value}
+            type="button"
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            {f.label}
+            <span class="count mono">{f.count}</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container-wide">
+    <div class="groups">
+      {
+        numbered.map((group) => (
+          <section class="group" data-group={group.category}>
+            <header class="cat" data-reveal>
+              <h2 class="cat-title">{t(categoryLabelKey[group.category])}</h2>
+              <p class="cat-desc">{t(categoryDescKey[group.category])}</p>
+            </header>
+            <div class="rows">
+              {group.items.map(({ project, n: index }) => (
+                <WorkRow project={project} index={index} />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .head-section {
+    padding-top: calc(var(--nav-h) + var(--s-9));
+    padding-bottom: var(--s-6);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: var(--s-7);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--fs-sm);
+    font-weight: 450;
+    color: var(--text-2);
+    background: var(--glass-1);
+    border: 1px solid var(--line);
+    border-radius: var(--r-full);
+    padding: 8px 15px;
+    cursor: pointer;
+    transition:
+      color var(--t-fast) var(--ease),
+      border-color var(--t-fast) var(--ease),
+      background var(--t-fast) var(--ease);
+  }
+
+  .chip:hover {
+    color: var(--text);
+    border-color: var(--line-2);
+  }
+
+  .chip.active {
+    color: var(--text);
+    background: var(--a-tint);
+    border-color: var(--a-tint-2);
+  }
+
+  .count {
+    color: var(--text-4);
+    font-size: var(--fs-micro);
+  }
+
+  .chip.active .count {
+    color: var(--a-soft);
+  }
+
+  .groups {
+    display: grid;
+    gap: var(--s-9);
+  }
+
+  .group[hidden] {
+    display: none;
+  }
+
+  .cat {
+    padding-bottom: var(--s-4);
+    margin-bottom: var(--s-2);
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  .cat-title {
+    font-size: var(--fs-xl);
+    letter-spacing: -0.022em;
+  }
+
+  .cat-desc {
+    margin-top: 6px;
+    font-size: var(--fs-base);
+    color: var(--text-3);
+  }
+
+  .rows {
+    display: grid;
+  }
+</style>
+
+<script>
+  const setup = () => {
+    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const groups = Array.from(document.querySelectorAll<HTMLElement>('[data-group]'));
+    if (!chips.length || !groups.length) return;
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const value = chip.dataset.filter;
+
+        chips.forEach((c) => {
+          const on = c === chip;
+          c.classList.toggle('active', on);
+          c.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+
+        groups.forEach((g) => {
+          g.hidden = value !== 'all' && g.dataset.group !== value;
+        });
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', setup);
+</script>

@@ -1,0 +1,12 @@
+---
+import WorkIndex from '../../../components/pages/WorkIndex.astro';
+import Base from '../../../layouts/Base.astro';
+import { site } from '../../../data/site';
+import { useTranslations } from '../../../i18n/utils';
+
+const t = useTranslations('es');
+---
+
+<Base title={`${t('work.eyebrow')} — ${site.name}`} description={t('work.lead')}>
+  <WorkIndex />
+</Base>

@@ -1,0 +1,219 @@
+---
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+---
+
+{/* The last section of the professional site and the only bridge to the
+    creative half. Placed after Contact on purpose: a recruiter has
+    already seen everything that matters before this exists. */}
+<section id="universe" class="section portal">
+  <div class="container-wide">
+    <div class="inner">
+      <div class="orbit" aria-hidden="true">
+        <span class="ring r1"></span>
+        <span class="ring r2"></span>
+        <span class="ring r3"></span>
+        <span class="core"></span>
+        <span class="sat s1"></span>
+        <span class="sat s2"></span>
+      </div>
+
+      <div class="copy">
+        <span class="eyebrow" data-reveal>{t('portal.eyebrow')}</span>
+        <h2 class="h1 brand-type title" data-reveal data-reveal-delay="1">
+          {t('portal.title')}
+        </h2>
+        <p class="lead" data-reveal data-reveal-delay="2">{t('portal.lead')}</p>
+        <div class="cta" data-reveal data-reveal-delay="3">
+          <a class="btn btn-accent" href={path('/beyond', locale)}>{t('portal.cta')}</a>
+          <a class="btn btn-ghost" href={path('/labs', locale)}>{t('portal.labs')}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .portal {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+  }
+
+  .portal::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -55%;
+    width: min(1000px, 130%);
+    aspect-ratio: 1;
+    transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(162, 76, 255, 0.16), transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+
+  .inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: var(--s-8);
+    align-items: center;
+  }
+
+  /* ---- Orbit mark ---- */
+  .orbit {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    display: grid;
+    place-items: center;
+    justify-self: center;
+  }
+
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--line-2);
+  }
+
+  .r1 {
+    inset: 0;
+    border-top-color: var(--a);
+    animation: spin 24s linear infinite;
+  }
+
+  .r2 {
+    inset: 32px;
+    border-right-color: var(--a-pink);
+    animation: spin 17s linear infinite reverse;
+  }
+
+  .r3 {
+    inset: 66px;
+    border-bottom-color: var(--a-soft);
+    animation: spin 30s linear infinite;
+  }
+
+  .core {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--grad);
+    box-shadow: 0 0 44px var(--glow);
+    animation: breathe 5s var(--ease-in-out) infinite;
+  }
+
+  .sat {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--a-soft);
+    box-shadow: 0 0 12px var(--glow-tight);
+    top: 50%;
+    left: 50%;
+  }
+
+  .s1 {
+    transform-origin: 0 0;
+    animation: sat1 11s linear infinite;
+  }
+
+  .s2 {
+    transform-origin: 0 0;
+    background: var(--a-pink);
+    animation: sat2 16s linear infinite reverse;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes breathe {
+    0%,
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 44px var(--glow);
+    }
+    50% {
+      transform: scale(1.06);
+      box-shadow: 0 0 60px var(--glow-tight);
+    }
+  }
+
+  @keyframes sat1 {
+    from {
+      transform: rotate(0deg) translateX(120px);
+    }
+    to {
+      transform: rotate(360deg) translateX(120px);
+    }
+  }
+
+  @keyframes sat2 {
+    from {
+      transform: rotate(0deg) translateX(88px);
+    }
+    to {
+      transform: rotate(360deg) translateX(88px);
+    }
+  }
+
+  /* ---- Copy ---- */
+  .copy {
+    display: grid;
+    gap: var(--s-4);
+  }
+
+  /* Orbitron returns here — this is the identity zone, where it belongs. */
+  .title {
+    max-width: 24ch;
+    letter-spacing: -0.01em;
+    line-height: 1.16;
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: var(--s-2);
+  }
+
+  @media (max-width: 860px) {
+    .inner {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+    .orbit {
+      width: 180px;
+      height: 180px;
+      justify-self: start;
+    }
+    .r2 {
+      inset: 24px;
+    }
+    .r3 {
+      inset: 50px;
+    }
+    .core {
+      width: 42px;
+      height: 42px;
+    }
+    .title {
+      max-width: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring,
+    .core,
+    .sat {
+      animation: none !important;
+    }
+  }
+</style>

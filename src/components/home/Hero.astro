@@ -1,0 +1,332 @@
+---
+import { experience } from '../../data/experience';
+import { site } from '../../data/site';
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+/** Split on the middot so the roles stagger in one at a time. */
+const roles = t('hero.roles').split(' · ');
+const nameChars = site.wordmark.split('');
+
+const current = experience[0];
+---
+
+<section id="hero" class="hero">
+  <div class="container-wide inner">
+    {/* Credential chip. The portrait stays, but small: at this scale the
+        type has to dominate or the page stops reading as senior. */}
+    <a class="chip" href="#experience">
+      <img src={site.avatar} alt={site.name} width="72" height="72" loading="eager" />
+      <span class="chip-text">
+        <span class="chip-role">{current.title[locale]}</span>
+        <span class="chip-at">{current.company}</span>
+      </span>
+      <span class="chip-dot" aria-hidden="true"></span>
+    </a>
+
+    <h1 class="name display">
+      <span class="visually-hidden">{site.name}</span>
+      {
+        nameChars.map((c, i) => (
+          <span class="ch" style={`--i:${i}`} aria-hidden="true">
+            {c === ' ' ? ' ' : c}
+          </span>
+        ))
+      }
+    </h1>
+
+    <p class="roles">
+      {
+        roles.map((r, i) => (
+          <span class="role" style={`--i:${i}`}>
+            {r}
+          </span>
+        ))
+      }
+    </p>
+
+    <p class="pitch">{t('hero.lead')}</p>
+
+    <div class="cta">
+      <a class="btn btn-primary" href="#work">{t('hero.cta.primary')}</a>
+      <a class="btn btn-ghost" href={path('/beyond', locale)}>
+        <span class="orb" aria-hidden="true"></span>
+        {t('hero.cta.secondary')}
+      </a>
+    </div>
+  </div>
+
+  <a href="#about" class="scroll-cue" aria-label={t('hero.scroll')}>
+    <span class="mono">{t('hero.scroll')}</span>
+    <span class="line" aria-hidden="true"></span>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding-top: calc(var(--nav-h) + var(--s-6));
+    padding-bottom: var(--s-10);
+  }
+
+  /* A single soft pool of light behind the type. The only glow the hero
+     gets — restraint is what separates premium from arcade. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 38%;
+    width: min(1100px, 120%);
+    aspect-ratio: 2 / 1;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(closest-side, rgba(162, 76, 255, 0.13), transparent 72%);
+    filter: blur(30px);
+    pointer-events: none;
+  }
+
+  .inner {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: clamp(20px, 3.5vh, 40px);
+  }
+
+  /* ---- Credential chip ---- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 16px 6px 6px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-full);
+    background: var(--glass-1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    animation: rise 0.9s var(--ease) both;
+    transition:
+      border-color var(--t-med) var(--ease),
+      background var(--t-med) var(--ease);
+  }
+
+  .chip:hover {
+    border-color: var(--line-2);
+    background: var(--glass-2);
+  }
+
+  .chip img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--line-2);
+  }
+
+  .chip-text {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    font-size: var(--fs-sm);
+    line-height: 1;
+  }
+
+  .chip-role {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .chip-at {
+    color: var(--text-3);
+  }
+
+  .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--a);
+    box-shadow: 0 0 10px var(--glow-tight);
+    animation: pulse 2.6s var(--ease-in-out) infinite;
+  }
+
+  /* ---- Name ---- */
+  .name {
+    margin: 0;
+    line-height: 0.9;
+    text-transform: none;
+  }
+
+  .ch {
+    display: inline-block;
+    animation: charIn 1s var(--ease) both;
+    animation-delay: calc(0.1s + var(--i) * 0.035s);
+  }
+
+  @keyframes charIn {
+    from {
+      opacity: 0;
+      transform: translateY(0.32em);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+
+  /* ---- Roles ---- */
+  .roles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 0;
+    max-width: 44rem;
+  }
+
+  .role {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    letter-spacing: 0.02em;
+    color: var(--text);
+    animation: rise 0.8s var(--ease) both;
+    animation-delay: calc(0.42s + var(--i) * 0.07s);
+  }
+
+  .role + .role::before {
+    content: '·';
+    color: var(--a);
+    margin: 0 12px;
+  }
+
+  /* ---- Pitch ---- */
+  .pitch {
+    font-size: clamp(1.125rem, 1.5vw + 0.8rem, 1.625rem);
+    line-height: 1.45;
+    letter-spacing: -0.018em;
+    color: var(--text-2);
+    max-width: 34ch;
+    text-wrap: balance;
+    animation: rise 0.9s var(--ease) both;
+    animation-delay: 0.62s;
+  }
+
+  /* ---- CTAs ---- */
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: var(--s-2);
+    animation: rise 0.9s var(--ease) both;
+    animation-delay: 0.74s;
+  }
+
+  .orb {
+    position: relative;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--grad);
+    box-shadow: 0 0 10px var(--glow);
+    flex: none;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---- Scroll cue ---- */
+  .scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-4);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    animation: rise 1s var(--ease) both;
+    animation-delay: 1s;
+  }
+
+  .scroll-cue:hover {
+    color: var(--text-2);
+  }
+
+  .scroll-cue .line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(var(--line-3), transparent);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-cue .line::after {
+    content: '';
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 1px;
+    height: 12px;
+    background: var(--a);
+    box-shadow: 0 0 8px var(--glow-tight);
+    animation: trickle 2.2s var(--ease-in-out) infinite;
+  }
+
+  @keyframes trickle {
+    0% {
+      transform: translateY(-14px);
+      opacity: 0;
+    }
+    35% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero {
+      min-height: auto;
+      padding-top: calc(var(--nav-h) + var(--s-8));
+      padding-bottom: var(--s-9);
+    }
+    .pitch {
+      max-width: 100%;
+    }
+    .scroll-cue {
+      display: none;
+    }
+    .cta .btn {
+      flex: 1 1 auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ch,
+    .role,
+    .pitch,
+    .cta,
+    .chip,
+    .scroll-cue {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+  }
+</style>

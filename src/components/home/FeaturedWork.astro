@@ -1,0 +1,152 @@
+---
+import {
+  categoryDescKey,
+  categoryLabelKey,
+  featured,
+  projects,
+  workCategories,
+  type WorkCategory,
+} from '../../data/work';
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+import WorkCard from '../work/WorkCard.astro';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+/**
+ * Home shows the featured set grouped by category; the full index lives
+ * at /work. That split is what keeps this page a fixed length as the
+ * archive grows over the years.
+ */
+const groups = workCategories
+  .map((category) => ({
+    category,
+    items: featured.filter((p) => p.category === category),
+    total: projects.filter((p) => p.category === category).length,
+  }))
+  .filter((g) => g.items.length > 0);
+
+let counter = 0;
+const withNumbers = groups.map((g) => ({
+  ...g,
+  items: g.items.map((p) => ({ project: p, n: ++counter })),
+}));
+
+const hidden = projects.length - featured.length;
+---
+
+<section id="work" class="section">
+  <div class="container-wide">
+    <div class="head-row">
+      <div class="section-head">
+        <span class="eyebrow" data-reveal>{t('work.eyebrow')}</span>
+        <h2 class="h2" data-reveal data-reveal-delay="1">{t('work.title')}</h2>
+        <p class="lead" data-reveal data-reveal-delay="2">{t('work.lead')}</p>
+      </div>
+
+      <a class="link-arrow all" href={path('/work', locale)} data-reveal data-reveal-delay="2">
+        {t('work.back')}<span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="groups">
+      {
+        withNumbers.map((group) => (
+          <section class="group" aria-labelledby={`cat-${group.category}`}>
+            <header class="cat" data-reveal>
+              <div class="cat-text">
+                <h3 class="cat-title" id={`cat-${group.category}`}>
+                  {t(categoryLabelKey[group.category as WorkCategory])}
+                </h3>
+                <p class="cat-desc">{t(categoryDescKey[group.category as WorkCategory])}</p>
+              </div>
+              <span class="cat-count mono">
+                {String(group.total).padStart(2, '0')}
+              </span>
+            </header>
+
+            <div class="cards">
+              {group.items.map(({ project, n }, i) => (
+                <WorkCard project={project} index={n} delay={(i % 3) + 1} />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+
+    {
+      hidden > 0 && (
+        <p class="more" data-reveal>
+          <a class="link-arrow" href={path('/work', locale)}>
+            {t('work.back')}<span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .head-row {
+    margin-bottom: var(--s-9);
+  }
+
+  .all {
+    padding-bottom: 4px;
+  }
+
+  .groups {
+    display: grid;
+    gap: var(--s-10);
+  }
+
+  /* ---- Category header ---- */
+  .cat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-5);
+    padding-bottom: var(--s-4);
+    margin-bottom: var(--s-6);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .cat-title {
+    font-size: var(--fs-xl);
+    letter-spacing: -0.022em;
+  }
+
+  .cat-desc {
+    margin-top: 6px;
+    font-size: var(--fs-base);
+    color: var(--text-3);
+    max-width: 52ch;
+  }
+
+  .cat-count {
+    color: var(--text-4);
+    letter-spacing: 0.12em;
+    flex: none;
+  }
+
+  .cards {
+    display: grid;
+    gap: var(--s-5);
+  }
+
+  .more {
+    margin-top: var(--s-8);
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .head-row {
+      margin-bottom: var(--s-7);
+    }
+    .groups {
+      gap: var(--s-9);
+    }
+  }
+</style>

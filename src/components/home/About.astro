@@ -1,0 +1,101 @@
+---
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+---
+
+<section id="about" class="section">
+  <div class="container-wide">
+    <div class="layout">
+      <div class="head">
+        <span class="eyebrow" data-reveal>{t('about.eyebrow')}</span>
+        <h2 class="h2" data-reveal data-reveal-delay="1">{t('about.title')}</h2>
+      </div>
+
+      {/* Three paragraphs. Not a biography: a recruiter decides in the
+          first one whether to keep scrolling. */}
+      <div class="body">
+        <p class="p lead-p" data-reveal data-reveal-delay="1">{t('about.p1')}</p>
+        <p class="p" data-reveal data-reveal-delay="2">{t('about.p2')}</p>
+        <p class="p" data-reveal data-reveal-delay="3">
+          {t('about.p3')}
+          <a class="uni-link" href={path('/beyond', locale)}>
+            {t('about.p3.link')}<span class="arrow" aria-hidden="true">↗</span>
+          </a>{t('about.p3.end')}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+
+  .head {
+    position: sticky;
+    top: calc(var(--nav-h) + var(--s-6));
+    display: grid;
+    gap: var(--s-4);
+  }
+
+  .body {
+    display: grid;
+    gap: var(--s-5);
+    max-width: 60ch;
+  }
+
+  .p {
+    font-size: var(--fs-lg);
+    line-height: 1.65;
+    color: var(--text-2);
+  }
+
+  /* First paragraph carries the weight — larger and brighter. */
+  .lead-p {
+    font-size: clamp(1.125rem, 0.6vw + 1rem, 1.375rem);
+    line-height: 1.55;
+    letter-spacing: -0.015em;
+    color: var(--text);
+  }
+
+  .uni-link {
+    color: var(--a-soft);
+    border-bottom: 1px solid var(--a-tint-2);
+    padding-bottom: 1px;
+    transition:
+      color var(--t-fast) var(--ease),
+      border-color var(--t-fast) var(--ease);
+  }
+
+  .uni-link:hover {
+    color: var(--text);
+    border-color: var(--line-3);
+  }
+
+  .arrow {
+    display: inline-block;
+    font-size: 0.85em;
+    margin-left: 3px;
+    transition: transform var(--t-med) var(--ease);
+  }
+
+  .uni-link:hover .arrow {
+    transform: translate(2px, -2px);
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+    .head {
+      position: static;
+    }
+  }
+</style>

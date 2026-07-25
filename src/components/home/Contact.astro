@@ -1,0 +1,200 @@
+---
+import { site } from '../../data/site';
+import { getLocale, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+const channels = [
+  { label: t('contact.email'), value: site.email, href: `mailto:${site.email}`, copy: true },
+  { label: 'LinkedIn', value: 'in/karenbuenoh18', href: site.linkedin, external: true },
+  { label: 'GitHub', value: 'karenbuenoh18', href: site.github, external: true },
+  ...(site.cv ? [{ label: t('contact.cv'), value: 'PDF', href: site.cv, external: true }] : []),
+];
+---
+
+<section id="contact" class="section">
+  <div class="container-wide">
+    <div class="layout surface edge-lit">
+      <div class="copy">
+        <span class="eyebrow" data-reveal>{t('contact.eyebrow')}</span>
+        <h2 class="h1 title" data-reveal data-reveal-delay="1">{t('contact.title')}</h2>
+        <p class="lead" data-reveal data-reveal-delay="2">{t('contact.lead')}</p>
+      </div>
+
+      <ul class="channels" data-reveal data-reveal-delay="3">
+        {
+          channels.map((c) => (
+            <li>
+              <a
+                class="channel"
+                href={c.href}
+                target={c.external ? '_blank' : undefined}
+                rel={c.external ? 'noopener noreferrer' : undefined}
+                data-copy={c.copy ? site.email : undefined}
+                data-copied-label={c.copy ? t('contact.copied') : undefined}
+              >
+                <span class="c-label mono">{c.label}</span>
+                <span class="c-value">{c.value}</span>
+                <span class="c-arrow" aria-hidden="true">
+                  {c.external ? '↗' : '→'}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <span id="copy-toast" class="toast mono" role="status" aria-live="polite"></span>
+</section>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
+    gap: var(--s-8);
+    padding: clamp(28px, 4vw, 64px);
+    border-radius: var(--r-2xl);
+    align-items: center;
+    background:
+      radial-gradient(120% 140% at 0% 0%, rgba(162, 76, 255, 0.09), transparent 58%),
+      var(--glass-1);
+  }
+
+  .copy {
+    display: grid;
+    gap: var(--s-4);
+  }
+
+  .title {
+    max-width: 20ch;
+  }
+
+  .channels {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+
+  .channel {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s-4);
+    padding: var(--s-4) var(--s-5);
+    background: var(--bg-1);
+    transition: background var(--t-fast) var(--ease);
+  }
+
+  .channel:hover {
+    background: var(--bg-3);
+  }
+
+  .c-label {
+    color: var(--text-4);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .c-value {
+    font-size: var(--fs-base);
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .c-arrow {
+    color: var(--text-4);
+    transition:
+      transform var(--t-med) var(--ease),
+      color var(--t-med) var(--ease);
+  }
+
+  .channel:hover .c-arrow {
+    color: var(--a-soft);
+    transform: translateX(3px);
+  }
+
+  /* ---- Copy confirmation ---- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translate(-50%, 20px);
+    padding: 9px 16px;
+    border-radius: var(--r-full);
+    background: var(--bg-3);
+    border: 1px solid var(--line-2);
+    color: var(--text);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1200;
+    transition:
+      opacity var(--t-med) var(--ease),
+      transform var(--t-med) var(--ease);
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (max-width: 880px) {
+    .layout {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+    .title {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .channel {
+      grid-template-columns: minmax(0, 1fr) auto;
+      row-gap: 4px;
+    }
+    .c-label {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<script>
+  const setup = () => {
+    const toast = document.getElementById('copy-toast');
+
+    document.querySelectorAll<HTMLAnchorElement>('[data-copy]').forEach((link) => {
+      if (link.dataset.copyBound) return;
+      link.dataset.copyBound = '1';
+
+      link.addEventListener('click', async (ev) => {
+        const value = link.dataset.copy;
+        // Only intercept when the clipboard is actually available, so the
+        // mailto: link keeps working everywhere else.
+        if (!value || !navigator.clipboard) return;
+
+        ev.preventDefault();
+        try {
+          await navigator.clipboard.writeText(value);
+          if (toast) {
+            toast.textContent = link.dataset.copiedLabel ?? 'Copied';
+            toast.classList.add('show');
+            window.setTimeout(() => toast.classList.remove('show'), 1800);
+          }
+        } catch {
+          window.location.href = link.href;
+        }
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', setup);
+</script>

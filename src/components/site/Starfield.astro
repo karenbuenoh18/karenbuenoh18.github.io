@@ -1,0 +1,180 @@
+---
+/**
+ * Ambient particle field.
+ *
+ * v1 drew a full constellation plus cursor-tethered lines on every page.
+ * That read as "arcade". Here the professional zone gets a calm, sparse
+ * drift ('low') and the Universe zone keeps the expressive version
+ * ('high') — the effect becomes a signal of which world you are in.
+ */
+interface Props {
+  intensity?: 'low' | 'high';
+}
+const { intensity = 'low' } = Astro.props as Props;
+---
+
+<canvas id="starfield" data-intensity={intensity} aria-hidden="true"></canvas>
+
+<style>
+  #starfield {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.75;
+  }
+
+  :global([data-zone='universe']) #starfield {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  interface Node {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    r: number;
+    a: number;
+  }
+
+  // Survives view transitions: cancel the previous loop before starting one.
+  declare global {
+    interface Window {
+      __starfieldRaf?: number;
+    }
+  }
+
+  const start = () => {
+    if (window.__starfieldRaf) cancelAnimationFrame(window.__starfieldRaf);
+
+    const canvas = document.getElementById('starfield');
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const high = canvas.dataset.intensity === 'high';
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const pointer = { x: -9999, y: -9999 };
+
+    let w = 0;
+    let h = 0;
+    let nodes: Node[] = [];
+
+    const resize = () => {
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // Sparser than v1 in the professional zone: density is what made
+      // the old field feel busy behind the content.
+      const divisor = high ? 15000 : 30000;
+      const cap = high ? 110 : 52;
+      const count = Math.min(cap, Math.round((w * h) / divisor));
+
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * (high ? 0.18 : 0.1),
+        vy: (Math.random() - 0.5) * (high ? 0.18 : 0.1),
+        r: Math.random() * (high ? 1.5 : 1.1) + 0.35,
+        a: Math.random() * 0.35 + 0.2,
+      }));
+    };
+
+    const tick = () => {
+      ctx.clearRect(0, 0, w, h);
+
+      for (const n of nodes) {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 0 || n.x > w) n.vx *= -1;
+        if (n.y < 0 || n.y > h) n.vy *= -1;
+
+        if (high) {
+          // Gentle attraction toward the cursor — Universe zone only.
+          const dx = pointer.x - n.x;
+          const dy = pointer.y - n.y;
+          const d = Math.hypot(dx, dy);
+          if (d < 160 && d > 0.01) {
+            n.x += (dx / d) * 0.3;
+            n.y += (dy / d) * 0.3;
+          }
+        }
+
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(198, 200, 230, ${n.a})`;
+        ctx.fill();
+      }
+
+      // Constellation links only in the expressive zone. O(n²) is fine at
+      // ~110 nodes and skipped entirely on the professional pages.
+      if (high) {
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const a = nodes[i];
+            const b = nodes[j];
+            const d = Math.hypot(a.x - b.x, a.y - b.y);
+            if (d < 120) {
+              ctx.strokeStyle = `rgba(162, 76, 255, ${0.13 * (1 - d / 120)})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          }
+
+          const dc = Math.hypot(nodes[i].x - pointer.x, nodes[i].y - pointer.y);
+          if (dc < 170) {
+            ctx.strokeStyle = `rgba(255, 60, 172, ${0.28 * (1 - dc / 170)})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(pointer.x, pointer.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      window.__starfieldRaf = requestAnimationFrame(tick);
+    };
+
+    if (high) {
+      window.addEventListener(
+        'pointermove',
+        (e) => {
+          pointer.x = e.clientX;
+          pointer.y = e.clientY;
+        },
+        { passive: true },
+      );
+      window.addEventListener('pointerleave', () => {
+        pointer.x = -9999;
+        pointer.y = -9999;
+      });
+    }
+
+    window.addEventListener('resize', resize, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (window.__starfieldRaf) cancelAnimationFrame(window.__starfieldRaf);
+      } else {
+        window.__starfieldRaf = requestAnimationFrame(tick);
+      }
+    });
+
+    resize();
+    window.__starfieldRaf = requestAnimationFrame(tick);
+  };
+
+  document.addEventListener('astro:page-load', start);
+</script>

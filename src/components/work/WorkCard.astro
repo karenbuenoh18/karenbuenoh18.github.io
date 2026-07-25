@@ -1,0 +1,308 @@
+---
+import { localize, type WorkProject } from '../../data/work';
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+interface Props {
+  project: WorkProject;
+  /** Position label shown in the corner, e.g. '01'. */
+  index: number;
+  /** Delay bucket for the reveal stagger. */
+  delay?: number;
+}
+
+const { project, index, delay = 1 } = Astro.props as Props;
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+const p = localize(project, locale);
+
+const href = path(`/work/${project.slug}`, locale);
+const num = String(index).padStart(2, '0');
+
+/** Two figures on the card; the rest live on the case study page. */
+const headline = p.metrics.slice(0, 2);
+---
+
+<article class="card surface sheen edge-lit" data-reveal data-reveal-delay={delay.toString()}>
+  <div class="top">
+    <span class="num mono">{num}</span>
+    <span class="domain mono">{p.domain}</span>
+    <span class="meta">
+      {
+        project.status === 'live' && (
+          <span class="badge badge-live">{project.status}</span>
+        )
+      }
+      <span class="period mono">{project.period}</span>
+    </span>
+  </div>
+
+  <h3 class="title">{p.title}</h3>
+  <p class="tagline">{p.tagline}</p>
+
+  <div class="split">
+    <div class="block">
+      <span class="label">{t('work.problem')}</span>
+      <p>{p.problem}</p>
+    </div>
+    <div class="block">
+      <span class="label">{t('work.solution')}</span>
+      <p>{p.solution}</p>
+    </div>
+  </div>
+
+  {
+    project.flow.length > 0 && (
+      <div class="block arch">
+        <span class="label">{t('work.architecture')}</span>
+        <div class="flow" role="list">
+          {project.flow.map((node, i) => (
+            <>
+              <span class="node" role="listitem">
+                {node}
+              </span>
+              {i < project.flow.length - 1 && (
+                <span class="arrow" aria-hidden="true">
+                  →
+                </span>
+              )}
+            </>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    project.tech.length > 0 && (
+      <ul class="tech">
+        {project.tech.map((tech) => (
+          <li class="pill">{tech}</li>
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    headline.length > 0 && (
+      <div class="impact">
+        <span class="label">{t('work.impact')}</span>
+        <dl class="figures">
+          {headline.map((m) => (
+            <div class="fig">
+              <dt>{m.value}</dt>
+              <dd>{m.label}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    )
+  }
+
+  <footer class="foot">
+    <a class="link-arrow cta" href={href}>
+      {t('work.cta')}<span class="arrow" aria-hidden="true">→</span>
+    </a>
+    {project.confidential && <span class="nda mono">{t('work.confidential')}</span>}
+  </footer>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    padding: clamp(24px, 3vw, 44px);
+    display: grid;
+    gap: var(--s-5);
+    border-radius: var(--r-xl);
+  }
+
+  .card:hover {
+    border-color: var(--line-2);
+    background: var(--glass-2);
+  }
+
+  /* ---- Top meta row ---- */
+  .top {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+  }
+
+  .num {
+    color: var(--text-4);
+    letter-spacing: 0.1em;
+  }
+
+  .domain {
+    color: var(--a-soft);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .meta {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-3);
+  }
+
+  .badge-live {
+    text-transform: uppercase;
+  }
+
+  .period {
+    color: var(--text-4);
+  }
+
+  /* ---- Title block ---- */
+  .title {
+    font-size: clamp(1.5rem, 2.2vw + 0.7rem, 2.375rem);
+    letter-spacing: -0.032em;
+    line-height: 1.06;
+    max-width: 24ch;
+  }
+
+  .tagline {
+    font-size: var(--fs-lg);
+    color: var(--text-2);
+    max-width: 62ch;
+    margin-top: calc(var(--s-3) * -1 + 4px);
+  }
+
+  /* ---- Problem / Solution ---- */
+  .split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-6);
+    padding-top: var(--s-2);
+    border-top: 1px solid var(--line);
+  }
+
+  .block {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-4);
+  }
+
+  .block p {
+    font-size: var(--fs-base);
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  /* ---- Architecture flow ---- */
+  .arch {
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .node {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    color: var(--text);
+    background: var(--glass-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    padding: 7px 11px;
+    white-space: nowrap;
+  }
+
+  .flow .arrow {
+    color: var(--a);
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  /* ---- Tech ---- */
+  .tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  /* ---- Impact figures ---- */
+  .impact {
+    display: grid;
+    gap: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-5);
+  }
+
+  .fig dt {
+    font-size: clamp(1.375rem, 1.4vw + 0.9rem, 1.875rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .fig dd {
+    margin-top: 6px;
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+    max-width: 32ch;
+  }
+
+  /* ---- Footer ---- */
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+  }
+
+  /* The CTA covers the card, so the whole surface is clickable while the
+     accessible name stays on a single real link. */
+  .cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .nda {
+    color: var(--text-4);
+  }
+
+  @media (max-width: 760px) {
+    .split,
+    .figures {
+      grid-template-columns: 1fr;
+      gap: var(--s-5);
+    }
+    .title {
+      max-width: none;
+    }
+    .flow {
+      gap: 6px;
+    }
+    .node {
+      white-space: normal;
+    }
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+/**
+ * The home narrative, composed once and rendered by both locale routes.
+ * Each section reads its own locale from Astro.url, so /  and /es/ stay
+ * in sync structurally and can never drift apart.
+ *
+ * Order is the story:
+ *   who → proof → how I think → what I built → what I know →
+ *   where I did it → tools → systems → credentials → talk → the universe
+ */
+import Hero from '../home/Hero.astro';
+import Proof from '../home/Proof.astro';
+import About from '../home/About.astro';
+import FeaturedWork from '../home/FeaturedWork.astro';
+import Expertise from '../home/Expertise.astro';
+import Experience from '../home/Experience.astro';
+import Stack from '../home/Stack.astro';
+import Architecture from '../home/Architecture.astro';
+import Certifications from '../home/Certifications.astro';
+import Contact from '../home/Contact.astro';
+import UniversePortal from '../home/UniversePortal.astro';
+---
+
+<Hero />
+<Proof />
+<About />
+<FeaturedWork />
+<Expertise />
+<Experience />
+<Stack />
+<Architecture />
+<Certifications />
+<Contact />
+<UniversePortal />

@@ -1,64 +1,153 @@
 ---
-import Starfield from '../components/Starfield.astro';
+import { ClientRouter } from 'astro:transitions';
+import Starfield from '../components/site/Starfield.astro';
+import Nav from '../components/site/Nav.astro';
+import Footer from '../components/site/Footer.astro';
+import { site } from '../data/site';
+import { alternateLinks, getLocale, htmlLang, useTranslations } from '../i18n/utils';
 import '../styles/global.css';
 
-const {
-  title = 'Karen Bueno — Universo digital',
-  description = 'El espacio personal de Karen Bueno: ingeniería, cloud, inteligencia artificial y arquitectura de software, junto a la danza, la música, el arte y el aprendizaje continuo.',
-} = Astro.props;
+interface Props {
+  title?: string;
+  description?: string;
+  /**
+   * 'tech' is the restrained professional zone. 'universe' turns the
+   * expressive side up: brand typography, a livelier starfield.
+   */
+  zone?: 'tech' | 'universe';
+  /** Set false on pages that supply their own header. */
+  showNav?: boolean;
+}
+
+const { title, description, zone = 'tech', showNav = true } = Astro.props as Props;
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+const pageTitle = title ?? t('site.title');
+const pageDesc = description ?? t('site.description');
+const alternates = alternateLinks(Astro.url.pathname, Astro.site);
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.origin).href;
+const ogImage = new URL(site.ogImage, Astro.site ?? site.origin).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  alternateName: site.alternateName,
+  url: site.origin,
+  image: ogImage,
+  email: `mailto:${site.email}`,
+  jobTitle: 'Cloud & DevOps Engineer',
+  sameAs: [site.linkedin, site.github],
+  knowsAbout: [
+    'Cloud Engineering',
+    'DevOps',
+    'Platform Engineering',
+    'Amazon Web Services',
+    'Google Cloud Platform',
+    'Microsoft Azure',
+    'Terraform',
+    'Kubernetes',
+    'Infrastructure as Code',
+    'CI/CD',
+    'Artificial Intelligence',
+  ],
+};
 ---
+
 <!doctype html>
-<html lang="es">
+<html lang={htmlLang[locale]} data-zone={zone}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta name="author" content="Karen Bueno" />
-    <link rel="icon" type="image/png" href="/imagenes/LogotipoKB.png" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <meta name="author" content={site.name} />
+    <meta name="theme-color" content="#05050a" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href={site.favicon} />
 
-    <!-- Open Graph -->
+    {
+      alternates.map((a) => (
+        <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+      ))
+    }
+
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content="/imagenes/foto.jpg" />
+    <meta property="og:site_name" content={site.universe} />
+    <meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+    <meta name="twitter:image" content={ogImage} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+
+    <ClientRouter />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
   </head>
+
   <body>
-    <Starfield />
-    <slot />
+    <a class="skip-link" href="#main">{t('nav.skip')}</a>
+    <Starfield intensity={zone === 'universe' ? 'high' : 'low'} />
+
+    {showNav && <Nav />}
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
 
     <script>
-      // Scroll reveal
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
-        }
-      }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+      // Re-run on every view transition, not just the first paint.
+      const setup = () => {
+        // ---- Scroll reveal -------------------------------------------
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+        );
+        document.querySelectorAll('[data-reveal]:not(.is-in)').forEach((el) => io.observe(el));
 
-      // Card tilt + cursor spotlight
-      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!reduce) {
-        document.querySelectorAll('[data-tilt]').forEach((card) => {
-          const el = card as HTMLElement;
-          el.addEventListener('pointermove', (ev) => {
-            const r = el.getBoundingClientRect();
-            const px = (ev.clientX - r.left) / r.width;
-            const py = (ev.clientY - r.top) / r.height;
-            el.style.setProperty('--mx', `${px * 100}%`);
-            el.style.setProperty('--my', `${py * 100}%`);
-            el.style.transform = `perspective(900px) rotateX(${(py - 0.5) * -5}deg) rotateY(${(px - 0.5) * 6}deg) translateY(-4px)`;
-          });
-          el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduce) return;
+
+        // ---- Cursor sheen on glass surfaces --------------------------
+        // Coordinates only; no 3D tilt. Calmer reads as more expensive.
+        document.querySelectorAll('.sheen').forEach((node) => {
+          const el = node as HTMLElement;
+          if (el.dataset.sheenBound) return;
+          el.dataset.sheenBound = '1';
+          el.addEventListener(
+            'pointermove',
+            (ev) => {
+              const r = el.getBoundingClientRect();
+              el.style.setProperty('--mx', `${((ev.clientX - r.left) / r.width) * 100}%`);
+              el.style.setProperty('--my', `${((ev.clientY - r.top) / r.height) * 100}%`);
+            },
+            { passive: true },
+          );
         });
-      }
+      };
+
+      document.addEventListener('astro:page-load', setup);
     </script>
   </body>
 </html>

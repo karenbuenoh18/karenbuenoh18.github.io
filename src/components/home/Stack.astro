@@ -1,0 +1,127 @@
+---
+import { stack } from '../../data/stack';
+import { getLocale, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+---
+
+<section id="stack" class="section section-tight">
+  <div class="container-wide">
+    <div class="section-head">
+      <span class="eyebrow" data-reveal>{t('stack.eyebrow')}</span>
+      <h2 class="h2" data-reveal data-reveal-delay="1">{t('stack.title')}</h2>
+      <p class="lead" data-reveal data-reveal-delay="2">{t('stack.lead')}</p>
+    </div>
+
+    <div class="grid">
+      {
+        stack.map((group, i) => (
+          <section class="group" data-reveal data-reveal-delay={((i % 4) + 1).toString()}>
+            <header class="g-head">
+              <span class="glyph" aria-hidden="true">
+                {group.glyph}
+              </span>
+              <h3 class="g-title">{t(group.key)}</h3>
+              <span class="g-count mono">{group.items.length}</span>
+            </header>
+            <ul class="items">
+              {group.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    margin-top: var(--s-8);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--s-6) var(--s-5);
+  }
+
+  .group {
+    display: grid;
+    gap: var(--s-4);
+    align-content: start;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+    transition: border-color var(--t-med) var(--ease);
+  }
+
+  .group:hover {
+    border-top-color: var(--a-tint-2);
+  }
+
+  .g-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .glyph {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--r-sm);
+    font-size: 0.8rem;
+    color: var(--a-soft);
+    background: var(--a-tint);
+    border: 1px solid var(--a-tint-2);
+    flex: none;
+  }
+
+  .g-title {
+    font-size: var(--fs-base);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .g-count {
+    margin-left: auto;
+    color: var(--text-4);
+  }
+
+  /* Plain text list, not pills. Eight boxes of pills becomes visual
+     noise; a quiet column reads as inventory you actually know. */
+  .items {
+    display: grid;
+    gap: 7px;
+  }
+
+  .items li {
+    font-size: var(--fs-base);
+    color: var(--text-2);
+    line-height: 1.4;
+    transition: color var(--t-fast) var(--ease);
+  }
+
+  .group:hover .items li {
+    color: var(--text);
+  }
+
+  @media (max-width: 1000px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 420px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: var(--s-5);
+    }
+  }
+</style>

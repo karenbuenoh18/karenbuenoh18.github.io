@@ -1,0 +1,293 @@
+---
+import { facets, rhythms } from '../../data/beyond';
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+---
+
+{/* The creative half. Orbitron, warmer glow and the expressive starfield
+    all live here — the identity that reads as loud on the professional
+    pages becomes an asset in this one. */}
+<section class="section intro">
+  <div class="container-wide">
+    <span class="eyebrow" data-reveal>{t('beyond.eyebrow')}</span>
+    <h1 class="display brand-type heading" data-reveal data-reveal-delay="1">
+      {t('beyond.heading')}
+    </h1>
+    <p class="lead big" data-reveal data-reveal-delay="2">{t('beyond.lead')}</p>
+
+    <a class="link-arrow back" href={path('/', locale)} data-reveal data-reveal-delay="3">
+      <span class="arrow b-arrow" aria-hidden="true">←</span>{t('beyond.back')}
+    </a>
+  </div>
+</section>
+
+{/* ---------- Dance ---------- */}
+<section id="dance" class="section">
+  <div class="container-wide">
+    <div class="section-head">
+      <span class="eyebrow" data-reveal>{t('beyond.dance')}</span>
+      <h2 class="h2 brand-type" data-reveal data-reveal-delay="1">{t('beyond.dance.lead')}</h2>
+      <p class="lead" data-reveal data-reveal-delay="2">{t('beyond.dance.body')}</p>
+    </div>
+
+    <div class="two">
+      <article class="card surface sheen" data-reveal data-reveal-delay="1">
+        <h3 class="c-title accent">{t('beyond.dance.rhythms')}</h3>
+        <ul class="rhythms">
+          {rhythms.map((r) => <li>{r}</li>)}
+        </ul>
+      </article>
+
+      <article class="card surface sheen" data-reveal data-reveal-delay="2">
+        <h3 class="c-title accent-2">{t('beyond.dance.practice')}</h3>
+        <p class="c-body">{t('beyond.dance.practiceBody')}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+{/* ---------- Facets ---------- */}
+<section id="creative" class="section">
+  <div class="container-wide">
+    <div class="section-head">
+      <span class="eyebrow" data-reveal>{t('site.universe')}</span>
+      <h2 class="h2 brand-type" data-reveal data-reveal-delay="1">{t('beyond.music')} · {t('beyond.art')} · {t('beyond.learning')}</h2>
+    </div>
+
+    <div class="facets">
+      {
+        facets.map((f, i) => (
+          <article
+            class:list={['facet surface sheen', { wide: f.wide, soon: f.soon }]}
+            data-reveal
+            data-reveal-delay={((i % 3) + 1).toString()}
+          >
+            <header class="f-head">
+              <span class="glyph" aria-hidden="true">
+                {f.glyph}
+              </span>
+              {f.soon && <span class="badge">{t('beyond.soon')}</span>}
+            </header>
+            <h3 class="f-title">{t(f.titleKey)}</h3>
+            <p class="f-body">{t(f.bodyKey)}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="back-cta" data-reveal>
+      <a class="btn btn-ghost" href={path('/', locale)}>{t('beyond.back')}</a>
+      <a class="btn btn-ghost" href={path('/labs', locale)}>{t('nav.labs')}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---------- Intro ---------- */
+  .intro {
+    padding-top: calc(var(--nav-h) + var(--s-10));
+    padding-bottom: var(--s-8);
+    position: relative;
+  }
+
+  .intro::before {
+    content: '';
+    position: absolute;
+    left: 12%;
+    top: 22%;
+    width: min(760px, 90%);
+    aspect-ratio: 1.6;
+    background: radial-gradient(closest-side, rgba(255, 60, 172, 0.13), transparent 70%);
+    filter: blur(50px);
+    pointer-events: none;
+  }
+
+  .heading {
+    position: relative;
+    font-size: clamp(2.25rem, 5.5vw, 4.5rem);
+    line-height: 1.06;
+    letter-spacing: -0.008em;
+    max-width: 22ch;
+    margin-top: var(--s-4);
+  }
+
+  .lead.big {
+    margin-top: var(--s-5);
+    font-size: clamp(1.0625rem, 0.7vw + 0.95rem, 1.3125rem);
+    max-width: 56ch;
+  }
+
+  .back {
+    margin-top: var(--s-6);
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+  }
+
+  .back:hover {
+    color: var(--text);
+  }
+
+  .b-arrow {
+    transition: transform var(--t-med) var(--ease);
+  }
+
+  .back:hover .b-arrow {
+    transform: translateX(-4px);
+  }
+
+  /* ---------- Dance ---------- */
+  .two {
+    margin-top: var(--s-7);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+
+  .card {
+    padding: clamp(24px, 2.8vw, 38px);
+    border-radius: var(--r-xl);
+  }
+
+  .card:hover {
+    border-color: var(--line-2);
+    transform: translateY(-2px);
+  }
+
+  .c-title {
+    font-family: var(--font-brand);
+    font-size: var(--fs-lg);
+    letter-spacing: 0.01em;
+    margin-bottom: var(--s-4);
+  }
+
+  .accent {
+    color: var(--a-soft);
+  }
+
+  .accent-2 {
+    color: var(--a-pink);
+  }
+
+  .c-body {
+    font-size: var(--fs-base);
+    color: var(--text-2);
+    line-height: 1.65;
+  }
+
+  .rhythms {
+    display: grid;
+  }
+
+  .rhythms li {
+    position: relative;
+    padding: 13px 0 13px 24px;
+    color: var(--text);
+    font-size: var(--fs-base);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rhythms li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .rhythms li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--a-pink);
+    font-size: 0.7em;
+    top: 1.35em;
+  }
+
+  /* ---------- Facets ---------- */
+  .facets {
+    margin-top: var(--s-7);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+
+  .facet {
+    padding: clamp(22px, 2.4vw, 32px);
+    border-radius: var(--r-lg);
+    display: grid;
+    gap: var(--s-3);
+    align-content: start;
+  }
+
+  .facet:hover {
+    border-color: var(--line-2);
+    transform: translateY(-2px);
+  }
+
+  .facet.soon {
+    border-style: dashed;
+  }
+
+  .wide {
+    grid-column: span 2;
+  }
+
+  .f-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    margin-bottom: var(--s-1);
+  }
+
+  .glyph {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-md);
+    color: var(--a-pink);
+    background: rgba(255, 60, 172, 0.08);
+    border: 1px solid rgba(255, 60, 172, 0.2);
+  }
+
+  .f-title {
+    font-family: var(--font-brand);
+    font-size: var(--fs-md);
+    letter-spacing: 0.01em;
+  }
+
+  .f-body {
+    font-size: var(--fs-base);
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  .back-cta {
+    margin-top: var(--s-8);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 900px) {
+    .facets {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .wide {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .two,
+    .facets {
+      grid-template-columns: 1fr;
+    }
+    .wide {
+      grid-column: span 1;
+    }
+    .heading {
+      max-width: none;
+    }
+  }
+</style>

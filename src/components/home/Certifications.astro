@@ -1,0 +1,166 @@
+---
+import { certStatusKey, certStatusOrder, certifications } from '../../data/certifications';
+import { getLocale, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+const groups = certStatusOrder
+  .map((status) => ({ status, items: certifications.filter((c) => c.status === status) }))
+  .filter((g) => g.items.length > 0);
+
+const isEmpty = groups.length === 0;
+---
+
+<section id="certifications" class="section section-tight">
+  <div class="container-wide">
+    <div class="section-head">
+      <span class="eyebrow" data-reveal>{t('cert.eyebrow')}</span>
+      <h2 class="h2" data-reveal data-reveal-delay="1">{t('cert.title')}</h2>
+    </div>
+
+    {
+      isEmpty ? (
+        /* Honest empty state. A portfolio that fakes credentials fails the
+           one check every recruiter actually runs. */
+        <div class="empty surface" data-reveal data-reveal-delay="2">
+          <span class="e-glyph" aria-hidden="true">
+            ✦
+          </span>
+          <p>{t('cert.empty')}</p>
+        </div>
+      ) : (
+        <div class="groups">
+          {groups.map((group, gi) => (
+            <section class="group" data-reveal data-reveal-delay={((gi % 3) + 1).toString()}>
+              <h3 class="g-title mono">{t(certStatusKey[group.status])}</h3>
+              <ul class="list">
+                {group.items.map((cert) => (
+                  <li class="cert surface">
+                    <div class="c-main">
+                      <span class="c-name">{cert.name}</span>
+                      <span class="c-issuer">{cert.issuer}</span>
+                    </div>
+                    <div class="c-meta">
+                      {cert.year && <span class="mono c-year">{cert.year}</span>}
+                      {cert.url && (
+                        <a
+                          class="c-verify mono"
+                          href={cert.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          ↗
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .empty {
+    margin-top: var(--s-7);
+    padding: var(--s-7);
+    border-radius: var(--r-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+    border-style: dashed;
+  }
+
+  .e-glyph {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-md);
+    color: var(--a-soft);
+    background: var(--a-tint);
+    border: 1px solid var(--a-tint-2);
+    flex: none;
+  }
+
+  .empty p {
+    font-size: var(--fs-base);
+    color: var(--text-3);
+    max-width: 56ch;
+  }
+
+  .groups {
+    margin-top: var(--s-7);
+    display: grid;
+    gap: var(--s-6);
+  }
+
+  .g-title {
+    color: var(--text-4);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: var(--s-3);
+  }
+
+  .list {
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .cert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: var(--s-4) var(--s-5);
+    border-radius: var(--r-md);
+  }
+
+  .cert:hover {
+    border-color: var(--line-2);
+  }
+
+  .c-main {
+    display: grid;
+    gap: 3px;
+  }
+
+  .c-name {
+    font-size: var(--fs-base);
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .c-issuer {
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+  }
+
+  .c-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex: none;
+  }
+
+  .c-year {
+    color: var(--text-4);
+  }
+
+  .c-verify {
+    color: var(--a-soft);
+  }
+
+  @media (max-width: 520px) {
+    .empty {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: var(--s-5);
+    }
+  }
+</style>

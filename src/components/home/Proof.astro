@@ -1,0 +1,102 @@
+---
+import { getLocale, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+/**
+ * Four figures a recruiter can repeat to a hiring manager. Every one is
+ * traceable to a case study — nothing here is rounded up for effect.
+ */
+const stats = [
+  { value: t('proof.years.value'), label: t('proof.years.label') },
+  { value: t('proof.clouds.value'), label: t('proof.clouds.label') },
+  { value: t('proof.projects.value'), label: t('proof.projects.label') },
+  { value: t('proof.controls.value'), label: t('proof.controls.label') },
+];
+---
+
+<section class="proof" aria-label={t('proof.eyebrow')}>
+  <div class="container-wide">
+    <hr class="rule" />
+    <dl class="grid">
+      {
+        stats.map((s, i) => (
+          <div class="stat" data-reveal data-reveal-delay={(i + 1).toString()}>
+            <dt class="value">{s.value}</dt>
+            <dd class="label">{s.label}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .proof {
+    padding-block: var(--s-7) var(--s-4);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: var(--s-7);
+    background: var(--line);
+  }
+
+  /* Hairline separators drawn by the gap showing through — no borders to
+     fight over at the edges. */
+  .stat {
+    background: var(--bg);
+    padding: var(--s-2) var(--s-5) var(--s-5) 0;
+  }
+
+  .stat:not(:first-child) {
+    padding-left: var(--s-5);
+  }
+
+  .value {
+    font-size: clamp(1.75rem, 2.4vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    color: var(--text);
+    line-height: 1.05;
+  }
+
+  .label {
+    margin-top: 10px;
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+    max-width: 26ch;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .stat {
+      padding: var(--s-4) var(--s-4) var(--s-5) 0;
+    }
+    .stat:nth-child(odd) {
+      padding-left: 0;
+    }
+    .stat:nth-child(even) {
+      padding-left: var(--s-4);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .stat,
+    .stat:not(:first-child) {
+      padding: var(--s-4) 0;
+    }
+    .label {
+      max-width: none;
+    }
+  }
+</style>

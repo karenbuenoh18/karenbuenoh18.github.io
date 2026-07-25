@@ -1,0 +1,22 @@
+---
+import CaseStudy from '../../components/pages/CaseStudy.astro';
+import Base from '../../layouts/Base.astro';
+import { site } from '../../data/site';
+import { projects, type WorkProject } from '../../data/work';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props as { project: WorkProject };
+---
+
+<Base
+  title={`${project.title.en} — ${site.name}`}
+  description={project.tagline.en}
+>
+  <CaseStudy project={project} />
+</Base>

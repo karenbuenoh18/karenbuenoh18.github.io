@@ -1,0 +1,269 @@
+---
+import { experience } from '../../data/experience';
+import { getProject } from '../../data/work';
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+const roles = experience.map((r) => ({
+  ...r,
+  endLabel: r.end ?? t('exp.present'),
+  ongoing: r.end === null,
+  related: r.relatedWork
+    .map((slug) => getProject(slug))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p)),
+}));
+---
+
+<section id="experience" class="section">
+  <div class="container-wide">
+    <div class="section-head">
+      <span class="eyebrow" data-reveal>{t('exp.eyebrow')}</span>
+      <h2 class="h2" data-reveal data-reveal-delay="1">{t('exp.title')}</h2>
+    </div>
+
+    <ol class="timeline">
+      {
+        roles.map((r, i) => (
+          <li class="entry" data-reveal data-reveal-delay={((i % 3) + 1).toString()}>
+            <div class="marker" aria-hidden="true">
+              <span class:list={['dot', { live: r.ongoing }]} />
+            </div>
+
+            <div class="content">
+              <div class="when mono">
+                <span>{r.start}</span>
+                <span class="dash">—</span>
+                <span class:list={{ now: r.ongoing }}>{r.endLabel}</span>
+                <span class="sep">·</span>
+                <span class="loc">{r.location[locale]}</span>
+              </div>
+
+              <h3 class="role">
+                {r.title[locale]}
+                <span class="at">
+                  {' '}
+                  ·{' '}
+                  {r.url ? (
+                    <a href={r.url} target="_blank" rel="noopener noreferrer">
+                      {r.company}
+                    </a>
+                  ) : (
+                    r.company
+                  )}
+                </span>
+              </h3>
+
+              <p class="summary">{r.summary[locale]}</p>
+
+              <span class="label">{t('exp.responsibilities')}</span>
+              <ul class="duties">
+                {r.responsibilities[locale].map((d) => (
+                  <li>{d}</li>
+                ))}
+              </ul>
+
+              <ul class="stack">
+                {r.stack.map((s) => (
+                  <li class="pill">{s}</li>
+                ))}
+              </ul>
+
+              {r.related.length > 0 && (
+                <ul class="related">
+                  {r.related.map((p) => (
+                    <li>
+                      <a class="rel" href={path(`/work/${p.slug}`, locale)}>
+                        {p.title[locale]}
+                        <span class="arrow" aria-hidden="true">
+                          →
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    margin-top: var(--s-8);
+    display: grid;
+    gap: var(--s-8);
+    max-width: 78ch;
+  }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: var(--s-5);
+  }
+
+  /* ---- Rail ---- */
+  .marker {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 7px;
+  }
+
+  .marker::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    bottom: calc(var(--s-8) * -1 - 8px);
+    width: 1px;
+    background: linear-gradient(var(--line-2), transparent);
+  }
+
+  .entry:last-child .marker::before {
+    display: none;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--text-4);
+  }
+
+  .dot.live {
+    background: var(--a);
+    box-shadow: 0 0 12px var(--glow-tight);
+    animation: pulse 2.6s var(--ease-in-out) infinite;
+  }
+
+  /* ---- Content ---- */
+  .when {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+    color: var(--text-4);
+  }
+
+  .when .now {
+    color: var(--a-soft);
+  }
+
+  .when .sep {
+    opacity: 0.5;
+  }
+
+  .role {
+    margin-top: 10px;
+    font-size: var(--fs-2xl);
+    letter-spacing: -0.028em;
+  }
+
+  .at {
+    color: var(--text-3);
+    font-weight: 400;
+  }
+
+  .at a {
+    color: var(--text-3);
+  }
+
+  .at a:hover {
+    color: var(--a-soft);
+  }
+
+  .summary {
+    margin-top: var(--s-3);
+    font-size: var(--fs-lg);
+    color: var(--text-2);
+    max-width: 62ch;
+  }
+
+  .label {
+    display: block;
+    margin-top: var(--s-5);
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-4);
+  }
+
+  .duties {
+    margin-top: var(--s-3);
+    display: grid;
+    gap: 10px;
+  }
+
+  .duties li {
+    position: relative;
+    padding-left: 20px;
+    font-size: var(--fs-base);
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  .duties li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.65em;
+    width: 6px;
+    height: 1px;
+    background: var(--a);
+    opacity: 0.75;
+  }
+
+  .stack {
+    margin-top: var(--s-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .related {
+    margin-top: var(--s-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .rel {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+  }
+
+  .rel:hover {
+    color: var(--text);
+  }
+
+  .rel .arrow {
+    transition: transform var(--t-med) var(--ease);
+  }
+
+  .rel:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 560px) {
+    .entry {
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: var(--s-4);
+    }
+    .marker {
+      justify-content: flex-start;
+    }
+    .marker::before {
+      left: 4px;
+    }
+  }
+</style>

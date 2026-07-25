@@ -1,0 +1,457 @@
+---
+import { site } from '../../data/site';
+import {
+  alternatePath,
+  getLocale,
+  localeShort,
+  locales,
+  path,
+  useTranslations,
+} from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+const home = path('/', locale);
+const isHome = Astro.url.pathname === home;
+
+/**
+ * Section links are anchors on the home page and absolute links from
+ * anywhere else, so the nav never dead-ends on a case study.
+ */
+const anchor = (id: string) => (isHome ? `#${id}` : `${home === '/' ? '' : home}#${id}`);
+
+const sections = [
+  { id: 'work', label: t('nav.work') },
+  { id: 'expertise', label: t('nav.expertise') },
+  { id: 'experience', label: t('nav.experience') },
+  { id: 'about', label: t('nav.about') },
+];
+
+const beyondHref = path('/beyond', locale);
+const contactHref = anchor('contact');
+---
+
+<div id="progress" aria-hidden="true"></div>
+
+{/* Deliberately NOT transition:persist — the section links are rendered
+    per page (anchors on home, absolute elsewhere) and a persisted header
+    would keep the wrong hrefs after a navigation. */}
+<header id="nav">
+  <div class="nav-inner container-wide">
+    <a href={home} class="wordmark brand-type" aria-label={site.name}>
+      {site.wordmark}<span class="dot">.</span>
+    </a>
+
+    <nav class="desktop" aria-label={t('nav.menu')}>
+      {
+        sections.map((s) => (
+          <a href={anchor(s.id)} class="nav-link" data-section={s.id}>
+            {s.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="nav-right">
+      <a href={beyondHref} class="universe-link">
+        <span class="orb" aria-hidden="true"></span>
+        <span>{t('nav.beyond')}</span>
+      </a>
+
+      <div class="locale-switch" role="group" aria-label={t('nav.language')}>
+        {
+          locales.map((l) => (
+            <a
+              href={alternatePath(Astro.url.pathname, l)}
+              class:list={['loc', { active: l === locale }]}
+              hreflang={l}
+              aria-current={l === locale ? 'true' : undefined}
+            >
+              {localeShort[l]}
+            </a>
+          ))
+        }
+      </div>
+
+      <a href={contactHref} class="btn btn-ghost btn-sm contact-btn">{t('nav.contact')}</a>
+
+      <button
+        id="nav-toggle"
+        class="toggle"
+        aria-label={t('nav.open')}
+        aria-expanded="false"
+        aria-controls="nav-mobile"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile" id="nav-mobile" hidden>
+    <nav aria-label={t('nav.menu')}>
+      {sections.map((s) => <a href={anchor(s.id)}>{s.label}</a>)}
+      <a href={contactHref}>{t('nav.contact')}</a>
+      <hr class="rule" />
+      <a href={path('/labs', locale)}>{t('nav.labs')}</a>
+      <a href={beyondHref} class="m-universe">
+        <span class="orb" aria-hidden="true"></span>{t('nav.beyond')}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  #progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 0%;
+    background: var(--grad);
+    box-shadow: 0 0 10px var(--glow);
+    z-index: 1001;
+    transform-origin: 0 50%;
+    transition: width 0.08s linear;
+  }
+
+  #nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 1000;
+    height: var(--nav-h);
+    border-bottom: 1px solid transparent;
+    transition:
+      background var(--t-med) var(--ease),
+      border-color var(--t-med) var(--ease),
+      backdrop-filter var(--t-med) var(--ease);
+  }
+
+  #nav.scrolled {
+    background: rgba(5, 5, 10, 0.68);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    border-bottom-color: var(--line);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-5);
+    height: var(--nav-h);
+  }
+
+  /* ---- Wordmark ---- */
+  .wordmark {
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .wordmark:hover {
+    color: var(--text);
+  }
+  .dot {
+    color: var(--a);
+    text-shadow: 0 0 12px var(--glow);
+  }
+
+  /* ---- Desktop sections ---- */
+  .desktop {
+    display: flex;
+    align-items: center;
+    gap: var(--s-6);
+  }
+
+  .nav-link {
+    position: relative;
+    font-size: var(--fs-base);
+    font-weight: 450;
+    color: var(--text-2);
+    padding: 6px 0;
+    transition: color var(--t-fast) var(--ease);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 0;
+    background: var(--grad);
+    transition: width var(--t-med) var(--ease);
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--text);
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+  /* ---- Right cluster ---- */
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+  }
+
+  /* The portal to the other half of the universe. A small orbiting mark
+     signals "different world" without shouting for attention. */
+  .universe-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--fs-base);
+    font-weight: 450;
+    color: var(--text-2);
+    padding-right: var(--s-4);
+    border-right: 1px solid var(--line);
+  }
+
+  .universe-link:hover {
+    color: var(--text);
+  }
+
+  .orb {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--grad);
+    box-shadow: 0 0 10px var(--glow);
+    flex: none;
+  }
+
+  .orb::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid var(--a-tint-2);
+    animation: orbit 4s var(--ease-in-out) infinite;
+  }
+
+  @keyframes orbit {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.35);
+      opacity: 0.25;
+    }
+  }
+
+  /* ---- Locale switch ---- */
+  .locale-switch {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-full);
+    background: var(--glass-1);
+  }
+
+  .loc {
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.08em;
+    color: var(--text-3);
+    padding: 4px 9px;
+    border-radius: var(--r-full);
+    transition:
+      color var(--t-fast) var(--ease),
+      background var(--t-fast) var(--ease);
+  }
+
+  .loc:hover {
+    color: var(--text);
+  }
+
+  .loc.active {
+    color: var(--text);
+    background: var(--glass-3);
+  }
+
+  /* ---- Mobile toggle ---- */
+  .toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    margin-right: -8px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .toggle .bar {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    border-radius: 2px;
+    background: var(--text);
+    transition: transform var(--t-med) var(--ease);
+  }
+
+  .toggle[aria-expanded='true'] .bar:nth-child(1) {
+    transform: translateY(3.25px) rotate(45deg);
+  }
+  .toggle[aria-expanded='true'] .bar:nth-child(2) {
+    transform: translateY(-3.25px) rotate(-45deg);
+  }
+
+  /* ---- Mobile panel ---- */
+  .mobile {
+    position: fixed;
+    inset: var(--nav-h) 0 auto;
+    background: rgba(6, 6, 12, 0.96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--line);
+    padding: var(--s-3) 0 var(--s-5);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+      opacity var(--t-med) var(--ease),
+      transform var(--t-med) var(--ease);
+  }
+
+  .mobile[hidden] {
+    display: none;
+  }
+
+  .mobile.open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile a {
+    font-size: var(--fs-lg);
+    font-weight: 450;
+    color: var(--text);
+    padding: 14px var(--gutter);
+  }
+
+  .mobile a:active {
+    background: var(--glass-2);
+  }
+
+  .mobile .rule {
+    margin: var(--s-3) var(--gutter);
+  }
+
+  .m-universe {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (max-width: 1020px) {
+    .desktop,
+    .contact-btn {
+      display: none;
+    }
+    .toggle {
+      display: flex;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .universe-link span:last-child {
+      display: none;
+    }
+    .universe-link {
+      padding-right: var(--s-3);
+    }
+  }
+</style>
+
+<script>
+  const setup = () => {
+    const nav = document.getElementById('nav');
+    const bar = document.getElementById('progress');
+    const toggle = document.getElementById('nav-toggle');
+    const panel = document.getElementById('nav-mobile');
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      nav?.classList.toggle('scrolled', y > 16);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (bar) bar.style.width = `${Math.min(100, (y / (max || 1)) * 100)}%`;
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ---- Mobile panel ------------------------------------------------
+    const close = () => {
+      if (!panel || !toggle) return;
+      panel.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      // Wait out the transition before removing from the a11y tree.
+      window.setTimeout(() => {
+        if (!panel.classList.contains('open')) panel.hidden = true;
+      }, 320);
+    };
+
+    toggle?.addEventListener('click', () => {
+      if (!panel) return;
+      const willOpen = panel.hidden || !panel.classList.contains('open');
+      if (willOpen) {
+        panel.hidden = false;
+        requestAnimationFrame(() => panel.classList.add('open'));
+        toggle.setAttribute('aria-expanded', 'true');
+      } else {
+        close();
+      }
+    });
+
+    panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+
+    // ---- Scrollspy ---------------------------------------------------
+    // Highlights the section you are actually reading. Only on pages that
+    // contain the target sections.
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.nav-link'));
+    const targets = links
+      .map((l) => {
+        const id = l.dataset.section;
+        return id ? document.getElementById(id) : null;
+      })
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    if (targets.length) {
+      const spy = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            links.forEach((l) => l.classList.toggle('active', l.dataset.section === e.target.id));
+          }
+        },
+        { rootMargin: '-45% 0px -50% 0px' },
+      );
+      targets.forEach((el) => spy.observe(el));
+    }
+  };
+
+  document.addEventListener('astro:page-load', setup);
+</script>

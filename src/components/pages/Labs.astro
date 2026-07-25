@@ -1,0 +1,169 @@
+---
+import { labTracks } from '../../data/labs';
+import { site } from '../../data/site';
+import { getLocale, path, useTranslations } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+---
+
+<section class="section head-section">
+  <div class="container-wide">
+    <div class="section-head">
+      <span class="eyebrow" data-reveal>{t('labs.eyebrow')}</span>
+      <h1 class="h1" data-reveal data-reveal-delay="1">{t('labs.heading')}</h1>
+      <p class="lead" data-reveal data-reveal-delay="2">{t('labs.lead')}</p>
+    </div>
+
+    <div class="actions" data-reveal data-reveal-delay="3">
+      <a class="btn btn-ghost" href={site.github} target="_blank" rel="noopener noreferrer">
+        GitHub<span aria-hidden="true">↗</span>
+      </a>
+      <a class="link-arrow" href={path('/', locale)}>
+        <span class="arrow back" aria-hidden="true">←</span>{t('labs.back')}
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container-wide">
+    <div class="grid">
+      {
+        labTracks.map((track, i) => (
+          <article
+            class:list={['track surface sheen', { soon: track.soon }]}
+            data-reveal
+            data-reveal-delay={((i % 2) + 1).toString()}
+          >
+            <header class="t-head">
+              <span class="glyph" aria-hidden="true">
+                {track.glyph}
+              </span>
+              {track.soon && <span class="badge">{t('labs.soon')}</span>}
+            </header>
+
+            <h2 class="t-title">{track.title[locale]}</h2>
+            <p class="t-body">{track.body[locale]}</p>
+
+            <ul class="tags">
+              {track.tags.map((tag) => (
+                <li class="pill">{tag}</li>
+              ))}
+            </ul>
+
+            {track.href && (
+              <a class="link-arrow out" href={track.href} target="_blank" rel="noopener noreferrer">
+                <span>{track.title[locale]}</span>
+                <span class="arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .head-section {
+    padding-top: calc(var(--nav-h) + var(--s-9));
+    padding-bottom: var(--s-6);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-6);
+    flex-wrap: wrap;
+    margin-top: var(--s-7);
+  }
+
+  .actions .btn {
+    gap: 6px;
+  }
+
+  .back {
+    transition: transform var(--t-med) var(--ease);
+  }
+
+  .link-arrow:hover .back {
+    transform: translateX(-4px);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+
+  .track {
+    padding: clamp(24px, 2.6vw, 36px);
+    border-radius: var(--r-lg);
+    display: grid;
+    gap: var(--s-4);
+    align-content: start;
+  }
+
+  .track:hover {
+    border-color: var(--line-2);
+    background: var(--glass-2);
+    transform: translateY(-2px);
+  }
+
+  /* Not-yet-real tracks read as deliberately reserved space, not as a
+     broken card. Dashed border does that work. */
+  .soon {
+    border-style: dashed;
+  }
+
+  .t-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+  }
+
+  .glyph {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--r-md);
+    font-size: 0.95rem;
+    color: var(--a-soft);
+    background: var(--a-tint);
+    border: 1px solid var(--a-tint-2);
+  }
+
+  .t-title {
+    font-size: var(--fs-xl);
+    letter-spacing: -0.024em;
+  }
+
+  .t-body {
+    font-size: var(--fs-base);
+    color: var(--text-2);
+    line-height: 1.62;
+    max-width: 52ch;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .out {
+    font-size: var(--fs-sm);
+    margin-top: var(--s-1);
+  }
+
+  @media (max-width: 720px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

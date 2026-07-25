@@ -1,0 +1,167 @@
+---
+import { getLocale, useTranslations, type UIKey } from '../../i18n/utils';
+
+const locale = getLocale(Astro.url);
+const t = useTranslations(locale);
+
+/**
+ * The Cloud & DevOps proof section. This is the block that has to make a
+ * recruiter think "this person knows infrastructure" before they reach
+ * anything creative — so it sits directly after the work, not in a
+ * footnote next to the dance classes.
+ */
+const pillars: { key: string; titleKey: UIKey; descKey: UIKey; glyph: string; wide?: boolean }[] = [
+  { key: 'iac', titleKey: 'cloud.iac.title', descKey: 'cloud.iac.desc', glyph: '▤', wide: true },
+  { key: 'cicd', titleKey: 'cloud.cicd.title', descKey: 'cloud.cicd.desc', glyph: '⇄' },
+  {
+    key: 'containers',
+    titleKey: 'cloud.containers.title',
+    descKey: 'cloud.containers.desc',
+    glyph: '◇',
+  },
+  {
+    key: 'security',
+    titleKey: 'cloud.security.title',
+    descKey: 'cloud.security.desc',
+    glyph: '⛨',
+    wide: true,
+  },
+  {
+    key: 'observability',
+    titleKey: 'cloud.observability.title',
+    descKey: 'cloud.observability.desc',
+    glyph: '◉',
+  },
+  {
+    key: 'reliability',
+    titleKey: 'cloud.reliability.title',
+    descKey: 'cloud.reliability.desc',
+    glyph: '↻',
+  },
+];
+
+const clouds = ['AWS', 'Google Cloud', 'Azure'];
+---
+
+<section id="expertise" class="section">
+  <div class="container-wide">
+    <div class="head-row">
+      <div class="section-head">
+        <span class="eyebrow" data-reveal>{t('cloud.eyebrow')}</span>
+        <h2 class="h2" data-reveal data-reveal-delay="1">{t('cloud.title')}</h2>
+        <p class="lead" data-reveal data-reveal-delay="2">{t('cloud.lead')}</p>
+      </div>
+
+      <ul class="clouds" data-reveal data-reveal-delay="2">
+        {clouds.map((c) => <li class="cloud mono">{c}</li>)}
+      </ul>
+    </div>
+
+    <div class="bento">
+      {
+        pillars.map((p, i) => (
+          <article
+            class:list={['tile surface sheen', { wide: p.wide }]}
+            data-reveal
+            data-reveal-delay={((i % 3) + 1).toString()}
+          >
+            <span class="glyph" aria-hidden="true">
+              {p.glyph}
+            </span>
+            <h3 class="t">{t(p.titleKey)}</h3>
+            <p class="d">{t(p.descKey)}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .head-row {
+    margin-bottom: var(--s-8);
+  }
+
+  .clouds {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .cloud {
+    color: var(--text-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-full);
+    padding: 6px 13px;
+    background: var(--glass-1);
+  }
+
+  /* Bento: asymmetric on purpose. A uniform 3×2 grid reads as a feature
+     list; unequal spans read as an editorial layout. */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+
+  .tile {
+    padding: clamp(22px, 2.2vw, 32px);
+    display: grid;
+    gap: var(--s-3);
+    align-content: start;
+    border-radius: var(--r-lg);
+  }
+
+  .tile:hover {
+    border-color: var(--line-2);
+    background: var(--glass-2);
+    transform: translateY(-2px);
+  }
+
+  .wide {
+    grid-column: span 2;
+  }
+
+  .glyph {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--r-md);
+    font-size: 0.95rem;
+    color: var(--a-soft);
+    background: var(--a-tint);
+    border: 1px solid var(--a-tint-2);
+    margin-bottom: var(--s-2);
+  }
+
+  .t {
+    font-size: var(--fs-lg);
+    letter-spacing: -0.02em;
+  }
+
+  .d {
+    font-size: var(--fs-base);
+    color: var(--text-2);
+    line-height: 1.6;
+    max-width: 54ch;
+  }
+
+  @media (max-width: 900px) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .wide {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .bento {
+      grid-template-columns: 1fr;
+    }
+    .wide {
+      grid-column: span 1;
+    }
+  }
+</style>
