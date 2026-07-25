@@ -62,8 +62,10 @@
   --fs-xl: clamp(1.1875rem, 0.6vw + 1.05rem, 1.375rem);
   --fs-2xl: clamp(1.375rem, 1vw + 1.15rem, 1.75rem);
   --fs-3xl: clamp(1.75rem, 2vw + 1.25rem, 2.5rem);
-  --fs-4xl: clamp(2rem, 3.2vw + 1.2rem, 3.25rem);
-  --fs-display: clamp(2.5rem, 7.5vw, 6rem);
+  --fs-4xl: clamp(1.875rem, 3vw + 1.15rem, 3rem);
+  /* Tuned for Orbitron, which sets much wider than a grotesk at the same
+     size — the ceiling is lower than it would be for Inter. */
+  --fs-display: clamp(2.125rem, 6vw, 4.75rem);
 
   /* ---- Space: 8pt grid ---- */
   --s-1: 4px;
@@ -212,16 +214,19 @@ body::after {
    Typography
    ============================================================ */
 
+/* Orbitron carries every heading — the display voice of the brand.
+   Tracking stays near zero: Orbitron is already a wide face, so the
+   negative tracking a grotesk wants would collapse its counters. */
 h1,
 h2,
 h3,
 h4,
 h5 {
-  font-family: var(--font-sans);
+  font-family: var(--font-brand);
   color: var(--text);
   font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -0.028em;
+  line-height: 1.16;
+  letter-spacing: 0.005em;
   text-wrap: balance;
 }
 
@@ -275,42 +280,50 @@ strong {
   background-clip: content-box;
 }
 
-/* ---- Display type ---- */
+/* ---- Display type ----
+   All Orbitron, so tracking is neutral-to-open rather than negative. */
 
 .display {
+  font-family: var(--font-brand);
   font-size: var(--fs-display);
-  font-weight: 600;
-  line-height: 0.94;
-  letter-spacing: -0.042em;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.008em;
 }
 
 .h1 {
+  font-family: var(--font-brand);
   font-size: var(--fs-4xl);
-  letter-spacing: -0.032em;
+  letter-spacing: 0.004em;
 }
 
 .h2 {
+  font-family: var(--font-brand);
   font-size: var(--fs-3xl);
-  letter-spacing: -0.03em;
+  letter-spacing: 0.004em;
 }
 
 .h3 {
+  font-family: var(--font-brand);
   font-size: var(--fs-xl);
-  letter-spacing: -0.022em;
+  letter-spacing: 0.008em;
 }
 
-/* Brand voice — wordmark and the Universe zone only. */
 .brand-type {
   font-family: var(--font-brand);
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
+/* Purple → pink across the whole element. Applied to a single element
+   with no transformed or filtered children: background-clip: text stops
+   painting through descendants that create their own render context. */
 .grad-text {
   background: var(--grad);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .lead {

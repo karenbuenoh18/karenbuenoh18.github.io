@@ -367,8 +367,8 @@ const lists = [
   }
 
   .l-title {
-    font-size: var(--fs-lg);
-    letter-spacing: -0.02em;
+    font-size: var(--fs-md);
+    letter-spacing: 0.008em;
     padding-bottom: var(--s-3);
     border-bottom: 1px solid var(--line-2);
     margin-bottom: var(--s-4);
@@ -409,8 +409,8 @@ const lists = [
   }
 
   .i-title {
-    font-size: var(--fs-xl);
-    letter-spacing: -0.022em;
+    font-size: var(--fs-lg);
+    letter-spacing: 0.008em;
     margin-bottom: var(--s-5);
   }
 
@@ -462,9 +462,11 @@ const lists = [
   .n-title {
     grid-column: 1;
     grid-row: 2;
-    font-size: clamp(1.375rem, 2vw, 2rem);
+    font-family: var(--font-brand);
+    font-size: clamp(1.25rem, 1.7vw, 1.75rem);
     font-weight: 600;
-    letter-spacing: -0.03em;
+    letter-spacing: 0.006em;
+    line-height: 1.24;
     color: var(--text);
     margin-top: 8px;
   }
