@@ -1,0 +1,14 @@
+# karenbuenoh18.github.io
+#
+# El sitio personal se indexa con normalidad.
+# Las carpetas de bocetos de clientes NO: son maquetas en revision, con
+# contenido sin aprobar y fotografia de relleno. Cada boceto trae ademas
+# su propia etiqueta <meta name="robots" content="noindex">, que es el
+# mecanismo que realmente bloquea la indexacion; esto es la capa de dominio.
+#
+# Al lanzar un sitio de cliente en su dominio propio, quitar su linea de aqui.
+
+User-agent: *
+Allow: /
+Disallow: /ad-studio/
+Disallow: /ad-studio2/
