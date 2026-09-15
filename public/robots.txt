@@ -10,7 +10,6 @@
 
 User-agent: *
 Allow: /
-Disallow: /ad-studio/
 Disallow: /ad-studio2/
 Disallow: /ad-studio3/
 Disallow: /ad-studio4/
