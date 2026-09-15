@@ -13,3 +13,6 @@ Allow: /
 Disallow: /ad-studio/
 Disallow: /ad-studio2/
 Disallow: /ad-studio3/
+Disallow: /ad-studio4/
+Disallow: /ad-studio6/
+Disallow: /ad-studio7/
